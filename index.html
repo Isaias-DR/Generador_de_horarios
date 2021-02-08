@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combinador de horarios</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+    <script>
+        var ExcelToJSON = function() {
+
+            this.parseExcel = function(file) {
+
+                var reader = new FileReader();
+
+                let json_hojas = [];
+
+                reader.onload = function(e) {
+
+                    var data = e.target.result;
+                    var workbook = XLSX.read(data, {
+                        type: 'binary'
+                    });
+
+                    // Recorrer las hojas del Excel
+                    workbook.SheetNames.forEach(function(sheetName) {
+
+                        // Guarda los nombres de las hojas
+                        json_hojas.push(sheetName);
+
+                        // Guarda los datos de esa hoha
+                        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                        
+                        var json_object = JSON.stringify(XL_row_object); // stringify combierte un objeto o valor a una cadena de texto
+                        var json_object_parse = JSON.parse(json_object); // analiza una cadena de texto como JSON, transformando opcionalmente  el valor producido por el análisis.
+                        console.log(json_object_parse);
+                        jQuery( '#xlx_json' ).val( json_object );
+                        //jQuery( '#xlx_json' ).val( XL_row_object );
+                    
+
+                        // Listar asignaturas
+                        const distinctAsignaturas = [...new Set(json_object_parse.map(x => x.Asignatura))]
+                        jQuery( '#asignaturas' ).val( json_asignaturas );               
+                    })
+
+                    // Listar las hojas del Excel
+                    console.log(json_hojas);
+                    jQuery( '#hojas' ).val( json_hojas );
+                };
+
+                reader.onerror = function(ex) {
+                    console.log(ex);
+                };
+
+                reader.readAsBinaryString(file);
+            };
+        };
+        
+        
+        function handleFileSelect(evt) {
+            
+            var files = evt.target.files; // Lista de objetos de archivos
+            var xl2json = new ExcelToJSON();
+            xl2json.parseExcel(files[0]);
+        }
+    
+    </script>
+</head>
+<body>
+    <form enctype="multipart/form-data">
+        <input id="upload" type=file  name="files[]">
+    </form>
+
+    <textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
+    <textarea class="form-control" rows=35 cols=20 id="hojas"></textarea>
+    <textarea class="form-control" rows=35 cols=80 id="asignaturas"></textarea>
+
+    <script>
+        document.getElementById('upload').addEventListener('change', handleFileSelect, false);
+    </script>
+</body>
+</html>
