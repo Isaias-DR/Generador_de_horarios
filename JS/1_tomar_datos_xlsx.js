@@ -1,57 +1,60 @@
-var ExcelToJSON = function() {
+class ExcelToJSON {
+	constructor() {
 
-	this.parseExcel = function(file) {
+		this.parseExcel = function (file) {
 
-		var reader = new FileReader();
+			var reader = new FileReader();
 
-		let json_hojas = [];
+			let json_hojas = [];
+			let json_contenidos = [];
 
-		reader.onload = function(e) {
+			reader.onload = function (e) {
 
-			var XL_row_object, json_object, json_object_parse;
+				var XL_row_object, json_object, json_object_parse;
 
-			var data = e.target.result;
-			var workbook = XLSX.read(
-				data, 
-				{ type: 'binary' }
-			);
+				var data = e.target.result;
+				var workbook = XLSX.read(
+					data,
+					{ type: 'binary' }
+				);
 
-			// Recorrer las hojas del Excel
-			workbook.SheetNames.forEach(function(sheetName) {
+				// Recorrer las hojas del Excel
+				workbook.SheetNames.forEach(function (sheetName) {
 
-				// Guarda los nombres de las hojas
-				json_hojas.push(sheetName);
+					// Guarda los nombres de las hojas
+					json_hojas.push(sheetName);					
+				});
 
-				// Guarda los datos de esa hoja
-				XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-				
-				json_object = JSON.stringify(XL_row_object); // stringify combierte un objeto o valor a una cadena de texto
-				json_object_parse = JSON.parse(json_object); // analiza una cadena de texto como JSON, transformando opcionalmente  el valor producido por el análisis.
+				// Tomar y guarda los datos de esa hoja
+				XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[json_hojas[0]]); // objeto
+
+				json_object = JSON.stringify(XL_row_object); // texto - stringify combierte un objeto o valor a una cadena de texto
+				json_object_parse = JSON.parse(json_object); // JSON - analiza una cadena de texto como JSON, transformando opcionalmente  el valor producido por el análisis.
+
+				// Listar contenido
 				console.log(json_object_parse);
-				jQuery( '#xlx_json' ).val( json_object );
+				jQuery('#xlx_json').val(json_object_parse); // El json_object se demora paro cuendo esta adentro del forEach ahi no \(º_º)/
 
-				if(sheetName == "Hoja1"){
-					// Listar asignaturas
-					const distinctAsignaturas = [ ...new Set(json_object_parse.map(x => x.Asignatura)) ];
-					console.log(distinctAsignaturas);
-					console.log(distinctAsignaturas[2]);
-					jQuery( '#asignaturas' ).val( distinctAsignaturas );  
-				}
 
-			})
+				// Listar las hojas del Excel
+				console.log(json_hojas);
+				jQuery('#hojas').val(json_hojas);
 
-			// Listar las hojas del Excel
-			console.log(json_hojas);
-			jQuery( '#hojas' ).val( json_hojas );
+				// Listar asignaturas
+				var distinctAsignaturas = [...new Set(json_object_parse.map(x => x.Asignatura))];
+				console.log(distinctAsignaturas);
+				console.log(distinctAsignaturas[2]);
+				jQuery('#asignaturas').val(distinctAsignaturas);
+			};
+
+			reader.onerror = function (ex) {
+				console.log(ex);
+			};
+
+			reader.readAsBinaryString(file);
 		};
-
-		reader.onerror = function(ex) {
-			console.log(ex);
-		};
-
-		reader.readAsBinaryString(file);
-	};
-};
+	}
+}
 
 
 function handleFileSelect(evt) {
