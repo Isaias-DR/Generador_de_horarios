@@ -25,7 +25,7 @@ class ExcelToJSON {
 					json_hojas.push(sheetName);					
 				});
 
-				// Tomar y guarda los datos de esa hoja
+				// Tomar y guarda los datos de esa hoja elegida
 				XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[json_hojas[0]]); // objeto
 
 				json_object = JSON.stringify(XL_row_object); // texto - stringify combierte un objeto o valor a una cadena de texto
@@ -33,7 +33,7 @@ class ExcelToJSON {
 
 				// Listar contenido
 				console.log(json_object_parse);
-				jQuery('#xlx_json').val(json_object_parse); // El json_object se demora paro cuendo esta adentro del forEach ahi no \(º_º)/
+				//jQuery('#xlx_json').val(json_object_parse); // El json_object se demora paro cuendo esta adentro del forEach ahi no \(º_º)/
 
 
 				// Listar las hojas del Excel
