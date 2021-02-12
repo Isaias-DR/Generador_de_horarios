@@ -4,6 +4,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Combinador de horarios</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+
 	<script src="tree/main/JS/jquery.min.js"></script>
 	<script src="tree/main/JS/jszip.js"></script>
 	<script src="tree/main/JS/xlsx.js"></script>
@@ -13,10 +17,11 @@
 	<form enctype="multipart/form-data">
 		<input id="upload" type=file  name="files[]">
 	</form>
-
-	<textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
-	<textarea class="form-control" rows=35 cols=20 id="hojas"></textarea>
+	
+	<div id="div_hojas" class="form-check"></div>
 	<textarea class="form-control" rows=35 cols=80 id="asignaturas"></textarea>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 
 	<script src="tree/main/JS/0_tomar_xlsx.js"></script>
 </body>

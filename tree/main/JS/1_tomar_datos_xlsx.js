@@ -22,7 +22,9 @@ class ExcelToJSON {
 				workbook.SheetNames.forEach(function (sheetName) {
 
 					// Guarda los nombres de las hojas
-					json_hojas.push(sheetName);					
+					json_hojas.push(sheetName);
+
+					document.getElementById("div_hojas").innerHTML = document.getElementById("div_hojas").innerHTML + "<input class='form-check-input' type='radio' id='hojas' name='hojas' value='"+sheetName+"' <label class='form-check-label' for="+sheetName+">"+ sheetName+"</label><br>";
 				});
 
 				// Tomar y guarda los datos de esa hoja elegida
