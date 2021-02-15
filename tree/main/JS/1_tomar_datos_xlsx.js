@@ -6,7 +6,6 @@ class ExcelToJSON {
 			var reader = new FileReader();
 
 			let json_hojas = [];
-			let json_contenidos = [];
 
 			reader.onload = function (e) {
 
