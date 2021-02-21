@@ -11,26 +11,77 @@
 	<script src="tree/main/JS/jquery.min.js"></script>
 	<script src="tree/main/JS/jszip.js"></script>
 	<script src="tree/main/JS/xlsx.js"></script>
-	<script src="tree/main/JS/1_tomar_datos_xlsx.js"></script>
+	<script src="tree/main/JS/uso_de_xlsx.js"></script>
 </head>
 <body>
 
-	<div class="container">
-		<form enctype="multipart/form-data">
-			<input id="upload" type=file  name="files[]">
-		</form>		
+	<nav class="navbar navbar-expand-lg navbar-light bg-light p-3 box-shadow">
+		<a class="navbar-brand" href="#">Combinador de horarios</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-link" href="#"><span class="sr-only"></span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#"></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#"></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link disabled" href="#"></a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 
-		<div></div>
+	<div class="container p-3">
+		<div class="p-2">			
+			<h6>1 - Elija un documeto Excel.</h6>
+			<form enctype="multipart/form-data">
+				<input id="upload" type=file  name="files[]">
+			</form>	
+		</div>	
 
-		<div id="div_hojas" class="form-check"></div>
+		<div class="p-2">
+			<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o Profesor/a.</h6>
+			<div id="div_hojas" class="form-check"></div>
+		</div>
 
-		<div id="div_datos" class="form-check"></div>
-	</div>	
+		<div class="p-2">
+			<h6>3 - Marque la primera fila que contenga los datos de la toma de ramos.</h6>
+			<div id="div_contenido" class="form-check"></div>
+		</div>
+	</div>
+
+	<div class="bg-light">
+		<footer>
+			<div class="container p-3">
+				<div class="row">
+					<div class="col-12 col-md-4 col-lg-2">
+						<h4>Facebook</h4>
+						<p><i class="fab fa-facebook"></i> <a href="#">/usuario</a></p>
+					</div>
+					<div class="col-12 col-md-4 col-lg-4">
+						<h4 id="contacto">Contactos</h4>
+						<p>San Telmo</p>
+					</div>
+					<div class="col-12 col-md-4 col-lg-6">
+						<h4 id="contacto">Estamos tambien</h4>
+						<p>Maoa</p>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>	
 
-	<script src="tree/main/JS/0_tomar_xlsx.js"></script>
+	<script src="tree/main/JS/tomar_xlsx.js"></script>
 </body>
 </html>

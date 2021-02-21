@@ -23,6 +23,7 @@ class ExcelToJSON {
 					json_hojas.push(sheetName);
 
 					// Crear HTML del los radios
+					
 					document.getElementById("div_hojas").innerHTML = document.getElementById("div_hojas").innerHTML + "<input class='form-check-input' type='radio' id='hojas' name='hojas' value='"+sheetName+"' onchange='handleChange(event);' > <label class='form-check-label' for="+sheetName+">"+ sheetName+"</label><br>";
 				});
 				/* Listar las hojas del Excel
