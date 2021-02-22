@@ -49,12 +49,13 @@
 		<div class="p-2">
 			<h6>Requisitos:</h6>
 			<ul>
+				<li>Leer cada parte de la presente pagína web.</li>
 				<li>Archivo con extensión .xlsx o .xls</li>
 				<li>Presentar en una hoja Excel, fila número 1 con los nombres de cada columna, y desde la fila número
 					2, los datos correspondientes.</li>
-				<li><strong>Ejemplo:</strong></li>
 			</ul>
-			<img src="tree/main/IMG/ejemplo.PNG">
+			<p><strong>Ejemplo:</strong></p>
+			<img src="tree/main/IMG/ejemplo.PNG" class="img-fluid" alt="Imagen de ejemplo del contenido que puede tener un Archibo Ecxel">
 		</div>
 
 		<div class="p-2">
@@ -71,32 +72,37 @@
 		<div class="p-2">
 			<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o
 				Profesor/a.</h6>
-			<div id="div_leaves" class="form-check"></div>
+			<div id="div_leaves"></div>
 		</div>
 
 		<div class="p-2">
-			<h6>3 - Confirme los nombres de cada columna</h6>
+			<h6>3 - Elija los nombres similares por su contenido de cada columna</h6>
 			<div class="row">
 				<div class="col-12 col-md-6 col-lg-4">
 					<div id="div_columns_name" class="form-check"></div>
 				</div>
-				<div class="col-12 col-md-6 col-lg-8">
-					<p>Los horarios pueden estar separados, pues se encuentran <strong>duplicadas</strong> las secciones, o pueden estar <strong>unificados</strong> en una sola fila.</p>
-					<p>Para ver si se encuentran duplicadas ordene por letras la columna sección en el Excel, la que presente la abrebiación del nombre de la asignatura con el número de asignatura y el número de sección.</p>
-					<p>Horarios <strong>duplicados</strong></p>
-					<img src="tree/main/IMG/duplicados.PNG" alt="Imagen de ejemplo para los horarios duplicados">
-					<p>Horarios <strong>unificados</strong></p>
-					<img src="tree/main/IMG/unificados.PNG" alt="Imagen de ejemplo para los horarios unificados">
+				<div class="col-12 col-md-6 col-lg-6">
 					<p><strong>Consideraciones:</strong></p>
 					<ul>
-						<li>Los nombres de columnas no confirmados no se podran configurar en los sigientes pasos.</li>
-						<li>Es obligatorio seleccionar las Asignaturas, Sección y Horario</li>
+						<li>Los nombres de columnas no confirmados, no se podrán elegir en los sigientes pasos.</li>
+						<li>Almenos deve elegir la asignarua duplicada o asignatura unificada, como tambien, la sección suplicada o sección unificada.</li>
 					</ul>
+					<p>Los horarios pueden estar separados, pues se encuentran <strong>duplicadas</strong> las secciones en mas de una fila, o pueden estar <strong>unificados</strong> en una sola fila.</p>
+					<p>Para ver si se encuentran duplicadas ordene por letras la columna sección en el Excel, la que presente la abrebiación del nombre de la asignatura con el número de asignatura y el número de sección.</p>
+					<p>Horarios <strong>duplicados</strong></p>
+					<img src="tree/main/IMG/duplicados.PNG" class="img-fluid" alt="Imagen de ejemplo para los horarios duplicados">
+					<p>Horarios <strong>unificados</strong></p>
+					<img src="tree/main/IMG/unificados.PNG" class="img-fluid" alt="Imagen de ejemplo para los horarios unificados">
 				</div>
 			</div>
 		</div>
-	</div>
 
+		<div class="p-2">
+			<h6>4 - Seleccione las asignaturas que desea tomar</h6>
+			<div id="div_subjets"></div>
+		</div>
+
+	</div>
 	<div class="bg-light">
 		<footer>
 			<div class="container p-3">
