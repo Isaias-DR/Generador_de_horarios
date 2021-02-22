@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" href="tree/main/IMG/favicon.ico">
+
 	<title>Combinador de horarios</title>
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-
-	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 	<script src="tree/main/JS/jquery.min.js"></script>
 	<script src="tree/main/JS/jszip.js"></script>
 	<script src="tree/main/JS/xlsx.js"></script>
 	<script src="tree/main/JS/uso_de_xlsx.js"></script>
 </head>
+
 <body>
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light p-3 box-shadow">
 		<a class="navbar-brand" href="#">Combinador de horarios</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-		  <span class="navbar-toggler-icon"></span>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
@@ -39,21 +45,55 @@
 	</nav>
 
 	<div class="container p-3">
-		<div class="p-2">			
-			<h6>1 - Elija un documeto Excel.</h6>
-			<form enctype="multipart/form-data">
-				<input id="upload" type=file  name="files[]">
-			</form>	
-		</div>	
 
 		<div class="p-2">
-			<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o Profesor/a.</h6>
-			<div id="div_hojas" class="form-check"></div>
+			<h6>Requisitos:</h6>
+			<ul>
+				<li>Archivo con extensión .xlsx o .xls</li>
+				<li>Presentar en una hoja Excel, fila número 1 con los nombres de cada columna, y desde la fila número
+					2, los datos correspondientes.</li>
+				<li><strong>Ejemplo:</strong></li>
+			</ul>
+			<img src="tree/main/IMG/ejemplo.PNG">
 		</div>
 
 		<div class="p-2">
-			<h6>3 - Marque la primera fila que contenga los datos de la toma de ramos.</h6>
-			<div id="div_contenido" class="form-check"></div>
+			<h5>Comencemos</h5>
+		</div>
+
+		<div class="p-2">
+			<h6>1 - Elija un documeto Excel.</h6>
+			<form enctype="multipart/form-data">
+				<input id="upload" type=file name="files[]">
+			</form>
+		</div>
+
+		<div class="p-2">
+			<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o
+				Profesor/a.</h6>
+			<div id="div_leaves" class="form-check"></div>
+		</div>
+
+		<div class="p-2">
+			<h6>3 - Confirme los nombres de cada columna</h6>
+			<div class="row">
+				<div class="col-12 col-md-6 col-lg-4">
+					<div id="div_columns_name" class="form-check"></div>
+				</div>
+				<div class="col-12 col-md-6 col-lg-8">
+					<p>Los horarios pueden estar separados, pues se encuentran <strong>duplicadas</strong> las secciones, o pueden estar <strong>unificados</strong> en una sola fila.</p>
+					<p>Para ver si se encuentran duplicadas ordene por letras la columna sección en el Excel, la que presente la abrebiación del nombre de la asignatura con el número de asignatura y el número de sección.</p>
+					<p>Horarios <strong>duplicados</strong></p>
+					<img src="tree/main/IMG/duplicados.PNG" alt="Imagen de ejemplo para los horarios duplicados">
+					<p>Horarios <strong>unificados</strong></p>
+					<img src="tree/main/IMG/unificados.PNG" alt="Imagen de ejemplo para los horarios unificados">
+					<p><strong>Consideraciones:</strong></p>
+					<ul>
+						<li>Los nombres de columnas no confirmados no se podran configurar en los sigientes pasos.</li>
+						<li>Es obligatorio seleccionar las Asignaturas, Sección y Horario</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -78,10 +118,17 @@
 		</footer>
 	</div>
 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+		crossorigin="anonymous"></script>
 
 	<script src="tree/main/JS/tomar_xlsx.js"></script>
 </body>
+
 </html>
