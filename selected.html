@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <select id="categorySelect" multiple="multiple">
+        <option value="1">Breakfast</option>
+        <option value="2">Lunch</option>
+        <option value="3">Dinner</option>
+        <option value="4">Snacks</option>
+        <option value="5">Dessert</option>
+    </select>
+    <select multiple class="form-control" id="exampleFormControlSelect2">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+    <button onclick="selected()">Selected</button>
+    <script>
+        function selected(){
+            let selectElement = document.getElementById('categorySelect')
+            let selectedValues = Array.from(selectElement.selectedOptions).map(option => option.value) // make sure you know what '.map' does
+            console.log(selectedValues);
+
+            // you could also do: selectElement.options
+        }
+    </script>
+</body>
+</html>
