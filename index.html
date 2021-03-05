@@ -65,63 +65,48 @@
 
 		<div class="p-2">
 			<h6>1 - Elija un documeto Excel.</h6>
-			<form enctype="multipart/form-data">
-				<input id="upload" type=file name="files[]">
-			</form>
+			<div class="mb-3">
+				<label for="formFile" class="form-label">Default file input example</label>
+				<input class="form-control" id="upload"  name="files[]" type="file">
+			</div>
 		</div>
 
 		<div class="p-2">
 			<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o
 				Profesor/a.</h6>
-			<div id="div_leaves"></div>
+			<div id="div_leaves" class="form-check"></div>
 		</div>
 
 		<div class="p-2">
-			<h6>3 - Elija los nombres similares por su contenido de cada columna</h6>
+			<h6>3 - Elija el nombre de columna que aparesca en el archivo Excel</h6>
 			<div class="row">
 				<div class="col-12 col-md-6 col-lg-4">
 					<div id="div_columns_name" class="form-check"></div>
 				</div>
-				<div class="col-12 col-md-6 col-lg-6">
-					<p><strong>Consideraciones:</strong></p>
-					<ul>
-						<li>Los nombres de columnas no confirmados, no se podrán elegir en los sigientes pasos.</li>
-						<li>Almenos deve elegir la asignarua duplicada o asignatura unificada, como tambien, la sección
-							suplicada o sección unificada.</li>
-					</ul>
-					<p>Los horarios pueden estar separados, pues se encuentran <strong>duplicadas</strong> las secciones
-						en mas de una fila, o pueden estar <strong>unificados</strong> en una sola fila.</p>
-					<p>Para ver si se encuentran duplicadas ordene por letras la columna sección en el Excel, la que
-						presente la abrebiación del nombre de la asignatura con el número de asignatura y el número de
-						sección.</p>
-					<p>Horarios <strong>duplicados</strong></p>
-					<img src="tree/main/IMG/duplicados.PNG" class="img-fluid"
-						alt="Imagen de ejemplo para los horarios duplicados">
-					<p>Horarios <strong>unificados</strong></p>
-					<img src="tree/main/IMG/unificados.PNG" class="img-fluid"
-						alt="Imagen de ejemplo para los horarios unificados">
+				<div class="col-12 col-md-6 col-lg-8">
+					<div id="div_columns_name2" class="form-check"></div>
 				</div>
 			</div>
 		</div>
 
 		<div class="p-2">
 			<h6>4 - Seleccione las jornada de clase</h6>
-			<div id="div_working_day"></div>
+			<div id="div_working_day" class="form-check"></div>
 		</div>
 
 		<div class="p-2">
 			<h6>5 - Seleccione las carrera que desea elegir</h6>
-			<div id="div_career"></div>
+			<div id="div_career" class="form-check"></div>
 		</div>
 
 		<div class="p-2">
 			<h6>6 - Seleccione el o los semenstres</h6>
-			<div id="div_semester"></div>
+			<div id="div_semester" class="form-check"></div>
 		</div>
 
 		<div class="p-2">
-			<h6>7 - Seleccione las asignaturas que desea tomar</h6>
-			<div id="div_subjets"></div>
+			<h6>7 - Seleccione las asignaturas que desea tomar (opcional)</h6>
+			<div id="div_subjets" class="form-check"></div>
 		</div>
 
 	</div>

@@ -1,8 +1,7 @@
-let arr_columns_name = ["Seleccione...", "Año", "Período", "Sede", "Escuela", "Carrera", "Plan", "Tipo Plan de Estudios", "Jornada", "Nivel", "Tipo Asignatura", "Sigla", "Asignatura", "Sección unificado", "Sección duplicado", "Créditos", "Horario unificado", "Horario duplicado", "Sala", "Docente", "Día"];
-console.log(arr_columns_name.indexOf("Asignatura"));
+let arr_columns_name = ["Año", "Período", "Sede", "Escuela", "Carrera", "Plan", "Tipo Plan de Estudios", "Jornada", "Nivel", "Tipo Asignatura", "Sigla", "Asignatura", "Asignatura programada", "Sección", "Créditos", "Horario", "Sala", "Docente", "Día"];
 let columns_name, columns_name_selected, distinctWorkingDay, distinctCourse, distinctSemester, distinctAsignaturas;
-var stringWorkingDay;
-var XL_row_object, json_object, json_object_parse, workbook, index_name_subjet;
+var stringWorkingDay, stringCourse, stringNivel, stringSubjets;
+var XL_row_object, json_object, json_object_parse, json_object_parse2, workbook, index_name_subjet;
 
 
 function handleFileSelect(evt) {
@@ -24,9 +23,9 @@ class ExcelToJSON {
 				workbook = XLSX.read(data, { type: 'binary' });
 
 				// Recorrer las hojas del Excel
+				document.getElementById("div_leaves").innerHTML = "";
 				workbook.SheetNames.forEach(function (sheetName) {
 
-					// Crear HTML del los radios
 					document.getElementById("div_leaves").innerHTML = document.getElementById("div_leaves").innerHTML +
 						"<div class='form-check'><input class='form-check-input' type='radio' id='hojas' name='hojas' value='" + sheetName + "' onchange='handleChange(event);' >" +
 						"<label class='form-check-label' for='" + sheetName + "'>" + sheetName + "</label></div>";
@@ -49,140 +48,142 @@ function handleChange(e) {
 	XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[e.currentTarget.value]); // objeto
 	json_object = JSON.stringify(XL_row_object); // texto - stringify combierte un objeto o valor a una cadena de texto
 	json_object_parse = JSON.parse(json_object); // JSON - analiza una cadena de texto como JSON, transformando opcionalmente  el valor producido por el análisis.
-
-	//console.log(json_object_parse);
-
-	// Tomar y muestra los nombres de cada nombre de columna
-	// Saber los nombres de las columnas
-	columns_name = Object.getOwnPropertyNames(json_object_parse[0]);
-
-	var string_selection = "";
-	for (let k = 0; k < arr_columns_name.length; k++) {
-
-		var name = arr_columns_name[k];
-		string_selection = string_selection + "<option value='" + k + "'>" + name + "</option>";
-	}
-
-	// Dibujar
-	for (let l = 0; l < columns_name.length; l++) {
-		
-		document.getElementById("div_columns_name").innerHTML = document.getElementById("div_columns_name").innerHTML +
-			"<p>" + columns_name[l] + "<select name='selectName' id='selectName" + l + "' class='custom-select custom-select-lg mb-3'> " + string_selection + "</select>" + "</p>";
-	}
-
-	// Agregar boton
-	document.getElementById("div_columns_name").innerHTML = document.getElementById("div_columns_name").innerHTML +
-		"<button onclick='getSelected()'>Continuar</button>";
+	
+	//showSelections();
+	showWorkingDay();
+	showCareer();
+	showSemester();
+	showSubject();
 }
 
-function getSelected() {
+function showSelections() {
 
-	// Guardar referencia a las columnas
-	columns_name_selected = [];
-	for (let ll = 0; ll < columns_name.length; ll++) {
+	// Lista nombre de las columnas registradas en el código
+	document.getElementById("div_columns_name").innerHTML = 
+		"<label for='' class='form-label'>Sección y Horario</label>"+
+		"<select class='form-select' id='selection'><option value='0'>Seleccione...</option><option value='1'>unificado</option><option value='2'>duplicado</option></select>"+
+		"<div class='p-2'><button class='btn btn-secondary' onclick='compararArray()'>Continuar</button></div>";
 
-		columns_name_selected.push(document.getElementById("selectName" + ll).value);
-	}
-	console.log(columns_name_selected);
+	document.getElementById("div_columns_name2").innerHTML = 	
+		"<p><strong>Consideraciones:</strong></p><p>Horarios y Sessión <strong>duplicados</strong></p><img src='tree/main/IMG/duplicados.PNG' class='img-fluid' alt='Imagen de ejemplo para los horarios duplicados'> <p>Horarios y Sessión <strong>unificados</strong></p> <img src='tree/main/IMG/unificados.PNG' class='img-fluid' alt='Imagen de ejemplo para los horarios unificados'>";
+}
 
-	showWorkingDay();
+function compararArray(){
+
+	// Saber los nombres de las columnas que tiene el arcchivo Excel
+	columns_name = Object.getOwnPropertyNames(json_object_parse[0]);
+
+	//Sigla programada o Sigla en malla > Sigla
+
+	//Asignatura programada o Asignatura en malla > Asignatura
+
+	// Creditos > X
+	
+	// Guardar referencia a las columnas	
 }
 
 function showWorkingDay() {
 
+	// Listar periodo
+	stringWorkingDay = "";
+	document.getElementById("div_working_day").innerHTML = ""; // diurno o vespertino
+
 	distinctWorkingDay = [...new Set(json_object_parse.map(x => x.Jornada))];
 
-	// Listar periodo
-	document.getElementById("div_working_day").innerHTML = "";
 	for (let m = 0; m < distinctWorkingDay.length; m++) {
-		
+
 		stringWorkingDay = stringWorkingDay + "<option>" + distinctWorkingDay[m] + "</option>";
 	}
 	document.getElementById("div_working_day").innerHTML = document.getElementById("div_working_day").innerHTML +
-		"<select multiple class='form-control' id='exampleFormControlSelect2'>" + stringWorkingDay + "</select><button onclick='showCareer()'>Continuar</button>";
+		"<select multiple class='form-control' id='working_day'>" + stringWorkingDay + "</select>";
 }
 
 function showCareer() {
 
-	// Saber el index elegido de la carrera
-	index_name_subjet = columns_name_selected.includes("5"); // carrera
-	console.log("¿Se eligió Carrera? " + index_name_subjet);
-
+	distinctCourse = "";
 	document.getElementById("div_career").innerHTML = "";
-	if (index_name_subjet) {
 
-		distinctCourse = [...new Set(json_object_parse.map(x => x.Carrera))];
+	distinctCourse = [...new Set(json_object_parse.map(x => x.Carrera))];
 
-		// Listar curso
-		for (let j = 0; j < distinctCourse.length; j++) {
-			
-			document.getElementById("div_career").innerHTML = document.getElementById("div_career").innerHTML +
-				"<div class='form-check-inline'><label class='form-check-label'><input type='checkbox' class='form-check-input' id='course' value='" + j + "'>" + distinctCourse[j] + "</label></div>";
-		}
-		document.getElementById("div_career").innerHTML = document.getElementById("div_career").innerHTML +
-			"<button onclick='showSemester()'>Continuar</button>";
+	// Listar curso
+	for (let n = 0; n < distinctCourse.length; n++) {
+
+		stringCourse = stringCourse + "<option>" + distinctCourse[n] + "</option>";
 	}
+	document.getElementById("div_career").innerHTML = document.getElementById("div_career").innerHTML +
+		"<select multiple class='form-control' id='career'>" + stringCourse + "</select>";
 }
 
 function showSemester() {
 
-	// Saber el index elegido el nivel o semestre 
-	index_name_subjet = columns_name_selected.includes("9"); //nivel
-	console.log("¿Se eligió Nivel? " + index_name_subjet);
-
+	stringNivel = "";
 	document.getElementById("div_semester").innerHTML = "";
-	if (index_name_subjet) {
 
-		distinctSemester = [...new Set(json_object_parse.map(x => x.Nivel))];
+	distinctSemester = [...new Set(json_object_parse.map(x => x.Nivel))];
 
-		// Listar semestre
-		for (let m = 0; m < distinctSemester.length; m++) {
-			
-			document.getElementById("div_semester").innerHTML = document.getElementById("div_semester").innerHTML +
-				"<div class='form-check-inline'><label class='form-check-label'><input type='checkbox' class='form-check-input' id='semester' value='" + m + "'>" + distinctSemester[m] + "</label></div>";
-		}
-		document.getElementById("div_semester").innerHTML = document.getElementById("div_semester").innerHTML +
-			"<button onclick='showSubject()'>Continuar</button>";
+	distinctSemester.sort();
+
+	// Listar semestre
+	for (let ñ = 0; ñ < distinctSemester.length; ñ++) {
+
+		stringNivel = stringNivel + "<option>" + distinctSemester[ñ] + "</option>";
 	}
+	document.getElementById("div_semester").innerHTML = document.getElementById("div_semester").innerHTML +
+		"<select multiple class='form-control' id='nivel'>" + stringNivel + "</select>";
 }
 
 function showSubject() {
 
-	// Saber el index elegido de la asignatura
-	index_name_subjet = columns_name_selected.includes("12"); // asignatura
-	console.log("¿Se eligió Asignatura? " + index_name_subjet);
-
+	stringSubjets = "";
 	document.getElementById("div_subjets").innerHTML = "";
-	if (index_name_subjet) {
 
-		distinctAsignaturas = [...new Set(json_object_parse.map(x => x.Asignatura))];
-		console.log(distinctAsignaturas);
+	distinctAsignaturas = [...new Set(json_object_parse.map(x => x.Asignatura))];
 
-		// Listar asignaturas
-		for (let k = 0; k < distinctAsignaturas.length; k++) {
-			
-			document.getElementById("div_subjets").innerHTML = document.getElementById("div_subjets").innerHTML +
-				"<div class='form-check-inline'><label class='form-check-label'><input type='checkbox' class='form-check-input' id='subjets' value='" + k + "'>" + distinctAsignaturas[k] + "</label></div>";
-		}
-		document.getElementById("div_subjets").innerHTML = document.getElementById("div_subjets").innerHTML +
-			"<button onclick='getValues()'>Continuar</button>";
+	// Listar asignaturas
+	for (let o = 0; o < distinctAsignaturas.length; o++) {
+
+		stringSubjets = stringSubjets + "<option>" + distinctAsignaturas[o] + "</option>";
 	}
+	document.getElementById("div_subjets").innerHTML = document.getElementById("div_subjets").innerHTML +
+		"<select multiple class='form-control' id='subjets'>" + stringSubjets + "</select><div class='p-2'><button class='btn btn-secondary' onclick='getValues()'>Generar Horarios</button></div>";
 }
 
 function getValues() {
-	var checkedValue = []; 
-	divCont = document.getElementById('working_day'); 
-	checks  = divCont.getElementsByTagName('input');
-	for(var i=0; checks[i]; ++i){
-		if(checks[i].checked){
-			checkedValue.push(checks[i].value);
-		}
+	let selectElement = document.getElementById('working_day')
+	let selectedValues = Array.from(selectElement.selectedOptions).map(option => option.value)
+
+	let selectElement2 = document.getElementById('career')
+	let selectedValues2 = Array.from(selectElement2.selectedOptions).map(option => option.value)
+
+	let selectElement3 = document.getElementById('nivel')
+	let selectedValues3 = Array.from(selectElement3.selectedOptions).map(option => option.value)
+
+	let selectElement4 = document.getElementById('subjets')
+	let selectedValues4 = Array.from(selectElement4.selectedOptions).map(option => option.value)
+
+	const dates = {
+		Jornada: [],
+		Carrera: [],
+		Nivel: [],
+		Asignatura: []
 	}
-	console.log(checkedValue);
-	console.log(document.getElementById("working_day").getValues);
-	console.log(document.getElementById("course").getValues);
-	console.log(document.getElementById("semester").getValues);
-	console.log(document.getElementById("subjet").getValues);
+
+	dates.Jornada = selectedValues;
+	dates.Carrera = selectedValues2;
+	dates.Nivel = selectedValues3;
+	dates.Asignatura = selectedValues4;
+	
+	json_object_parse2 = find_in_object(json_object_parse, dates);
+}
+
+function find_in_object(my_array, my_criteria) {
+	return my_array.filter(function (obj) {
+		return Object.keys(my_criteria).every(function (key) {
+			return (Array.isArray(my_criteria[key]) && (my_criteria[key].some(function (criteria) {
+				return (typeof obj[key] === 'string' && obj[key].indexOf(criteria) !== -1)
+			})) || my_criteria[key].length === 0);
+		});
+	});
 }
 
 function filter() {
@@ -207,16 +208,6 @@ function filter() {
 		vtv: ['Yes']
 	}
 	console.log(find_in_object(jsonData, query2)); //returns none
-
-	function find_in_object(my_array, my_criteria) {
-		return my_array.filter(function (obj) {
-			return Object.keys(my_criteria).every(function (key) {
-				return (Array.isArray(my_criteria[key]) && (my_criteria[key].some(function (criteria) {
-					return (typeof obj[key] === 'string' && obj[key].indexOf(criteria) !== -1)
-				})) || my_criteria[key].length === 0);
-			});
-		});
-	}
 }
 
 function drawTableWhitData() {
