@@ -2,7 +2,12 @@ let arr_columns_name = ["Año", "Período", "Sede", "Escuela", "Carrera", "Plan"
 let columns_name, columns_name_selected, distinctWorkingDay, distinctCourse, distinctSemester, distinctAsignaturas;
 var stringWorkingDay, stringCourse, stringNivel, stringSubjets;
 var XL_row_object, json_object, json_object_parse, json_object_parse2, workbook, index_name_subjet;
-
+const dates = {
+	Jornada: [],
+	Carrera: [],
+	Nivel: [],
+	Asignatura: []
+}
 
 function handleFileSelect(evt) {
 
@@ -159,21 +164,22 @@ function getValues() {
 	let selectedValues3 = Array.from(selectElement3.selectedOptions).map(option => option.value)
 
 	let selectElement4 = document.getElementById('subjets')
-	let selectedValues4 = Array.from(selectElement4.selectedOptions).map(option => option.value)
-
-	const dates = {
-		Jornada: [],
-		Carrera: [],
-		Nivel: [],
-		Asignatura: []
-	}
+	let selectedValues4 = Array.from(selectElement4.selectedOptions).map(option => option.value)	
 
 	dates.Jornada = selectedValues;
 	dates.Carrera = selectedValues2;
 	dates.Nivel = selectedValues3;
 	dates.Asignatura = selectedValues4;
-	
+
+	creatCalendar();
+}
+
+function creatCalendar(){	
 	json_object_parse2 = find_in_object(json_object_parse, dates);
+
+	console.log(json_object_parse2);
+
+	console.log([...new Set(json_object_parse2.map(x => x.Asignatura))]);
 }
 
 function find_in_object(my_array, my_criteria) {
