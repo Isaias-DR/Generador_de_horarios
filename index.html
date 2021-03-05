@@ -47,13 +47,26 @@
 	<div class="container p-3">
 
 		<div class="p-2">
+			<h6>Consideraciones:</h6>
+			<ol>
+				<li>El uso de este sistema es para generar horarios.</li>
+				<li>El presente sistema tiene por finalidad: usar filtros, generar horarios segun filtros, diseña los
+					horarios por semana y lista los horarios.</li>
+				<li>Los datos que entregan son unicamente del archivo Excel.</li>
+				<li>Atribuir responsabilidad externa al sistema, no son correspondidos.</li>
+				</o l>
+		</div>
+
+		<div class="p-2">
 			<h6>Requisitos:</h6>
-			<ul>
-				<li>Leer cada parte de la presente pagína web.</li>
+			<ol>
 				<li>Archivo con extensión .xlsx o .xls</li>
-				<li>Presentar en una hoja Excel, tener una fila los nombres de cada columna, y desde de esa fila tener
+				<li>Leer cada parte de la presente pagína web.</li>
+				<li>Tener en una hoja Excel con una fila de los nombres de cada columna, y desde de esa fila tener
 					los datos correspondientes.</li>
-			</ul>
+				<li>Cambiar los campos que estan en blanco en el archivo excel por un texto reconosible, se requiere
+					cambiarlos en la columna Nivel.</li>
+			</ol>
 			<p><strong>Ejemplo:</strong></p>
 			<img src="tree/main/IMG/ejemplo.PNG" class="img-fluid"
 				alt="Imagen de ejemplo del contenido que puede tener un Archibo Ecxel">
@@ -66,8 +79,7 @@
 		<div class="p-2">
 			<h6>1 - Elija un documeto Excel.</h6>
 			<div class="mb-3">
-				<label for="formFile" class="form-label">Default file input example</label>
-				<input class="form-control" id="upload"  name="files[]" type="file">
+				<input class="form-control" id="upload" name="files[]" type="file">
 			</div>
 		</div>
 
@@ -78,7 +90,7 @@
 		</div>
 
 		<div class="p-2">
-			<h6>3 - Elija el nombre de columna que aparesca en el archivo Excel</h6>
+			<h6>3 - Elija el nombre adecuado con su contenido que se asemeje con lo que esta en el archivo Excel</h6>
 			<div class="row">
 				<div class="col-12 col-md-6 col-lg-4">
 					<div id="div_columns_name" class="form-check"></div>
@@ -89,26 +101,27 @@
 			</div>
 		</div>
 
-		<div class="p-2">
-			<h6>4 - Seleccione las jornada de clase</h6>
-			<div id="div_working_day" class="form-check"></div>
+		<div class="row">
+			<h6>4 - Filtros</h6>
+			<div class="col-12 col-md-4">
+				<h6>Jornada</h6>
+				<div id="div_working_day" class="form-check"></div>
+			</div>
+			<div class="col-12 col-md-8">
+				<h6>Carrera</h6>
+				<div id="div_career" class="form-check"></div>
+			</div>
 		</div>
-
-		<div class="p-2">
-			<h6>5 - Seleccione las carrera que desea elegir</h6>
-			<div id="div_career" class="form-check"></div>
+		<div class="row">			
+			<div class="col-12 col-md-4">
+				<h6>Semenstres</h6>
+				<div id="div_semester" class="form-check"></div>
+			</div>
+			<div class="col-12 col-md-8">
+				<h6>Asignaturas</h6>
+				<div id="div_subjets" class="form-check"></div>
+			</div>
 		</div>
-
-		<div class="p-2">
-			<h6>6 - Seleccione el o los semenstres</h6>
-			<div id="div_semester" class="form-check"></div>
-		</div>
-
-		<div class="p-2">
-			<h6>7 - Seleccione las asignaturas que desea tomar</h6>
-			<div id="div_subjets" class="form-check"></div>
-		</div>
-		
 	</div>
 
 	<div class="bg-light">

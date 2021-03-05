@@ -12,37 +12,37 @@ const dates = {
 function handleFileSelect(evt) {
 
 	var files = evt.target.files; // Lista de objetos de archivos
-	var xl2json = new ExcelToJSON();
-	xl2json.parseExcel(files[0]);
+	var xl2json = new ExcelToJSON()
+	xl2json.parseExcel(files[0])
 }
 
 class ExcelToJSON {
 	constructor() {
 		this.parseExcel = function (file) {
 
-			var reader = new FileReader();
+			var reader = new FileReader()
 
 			reader.onload = function (e) {
 
 				var data = e.target.result;
-				workbook = XLSX.read(data, { type: 'binary' });
+				workbook = XLSX.read(data, { type: 'binary' })
 
 				// Recorrer las hojas del Excel
 				document.getElementById("div_leaves").innerHTML = "";
 				workbook.SheetNames.forEach(function (sheetName) {
 
 					document.getElementById("div_leaves").innerHTML = document.getElementById("div_leaves").innerHTML +
-						"<div class='form-check'><input class='form-check-input' type='radio' id='hojas' name='hojas' value='" + sheetName + "' onchange='handleChange(event);' >" +
+						"<div class='form-check'><input class='form-check-input' type='radio' id='hojas' name='hojas' value='" + sheetName + "' onchange='handleChange(event)' >" +
 						"<label class='form-check-label' for='" + sheetName + "'>" + sheetName + "</label></div>";
-				});
+				})
 			};
 
 			reader.onerror = function (ex) {
 
-				console.log(ex);
+				console.log(ex)
 			};
 
-			reader.readAsBinaryString(file);
+			reader.readAsBinaryString(file)
 		};
 	}
 }
@@ -50,15 +50,15 @@ class ExcelToJSON {
 function handleChange(e) {
 
 	// Tomar y guarda todos los datos de esa hoja elegida
-	XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[e.currentTarget.value]); // objeto
-	json_object = JSON.stringify(XL_row_object); // texto - stringify combierte un objeto o valor a una cadena de texto
-	json_object_parse = JSON.parse(json_object); // JSON - analiza una cadena de texto como JSON, transformando opcionalmente  el valor producido por el análisis.
+	XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[e.currentTarget.value]) // objeto
+	json_object = JSON.stringify(XL_row_object) // texto - stringify combierte un objeto o valor a una cadena de texto
+	json_object_parse = JSON.parse(json_object) // JSON - analiza una cadena de texto como JSON, transformando opcionalmente  el valor producido por el análisis.
 	
-	//showSelections();
-	showWorkingDay();
-	showCareer();
-	showSemester();
-	showSubject();
+	//showSelections()
+	showWorkingDay()
+	showCareer()
+	showSemester()
+	showSubject()
 }
 
 function showSelections() {
@@ -76,7 +76,7 @@ function showSelections() {
 function compararArray(){
 
 	// Saber los nombres de las columnas que tiene el arcchivo Excel
-	columns_name = Object.getOwnPropertyNames(json_object_parse[0]);
+	columns_name = Object.getOwnPropertyNames(json_object_parse[0])
 
 	//Sigla programada o Sigla en malla > Sigla
 
@@ -126,7 +126,7 @@ function showSemester() {
 
 	distinctSemester = [...new Set(json_object_parse.map(x => x.Nivel))];
 
-	distinctSemester.sort();
+	distinctSemester.sort()
 
 	// Listar semestre
 	for (let ñ = 0; ñ < distinctSemester.length; ñ++) {
@@ -135,6 +135,13 @@ function showSemester() {
 	}
 	document.getElementById("div_semester").innerHTML = document.getElementById("div_semester").innerHTML +
 		"<select multiple class='form-control' id='nivel'>" + stringNivel + "</select>";
+}
+
+function guardSubject(){
+	
+	if(distinctWorkingDay != [] && distinctCourse != [] && distinctSemester != []){
+		showSubject()
+	}
 }
 
 function showSubject() {
@@ -166,20 +173,20 @@ function getValues() {
 	let selectElement4 = document.getElementById('subjets')
 	let selectedValues4 = Array.from(selectElement4.selectedOptions).map(option => option.value)	
 
-	dates.Jornada = selectedValues;
-	dates.Carrera = selectedValues2;
-	dates.Nivel = selectedValues3;
-	dates.Asignatura = selectedValues4;
+	dates.Jornada = selectedValues
+	dates.Carrera = selectedValues2
+	dates.Nivel = selectedValues3
+	dates.Asignatura = selectedValues4
 
-	creatCalendar();
+	creatCalendar()
 }
 
 function creatCalendar(){	
-	json_object_parse2 = find_in_object(json_object_parse, dates);
+	json_object_parse2 = find_in_object(json_object_parse, dates)
 
-	console.log(json_object_parse2);
+	console.log(json_object_parse2)
 
-	console.log([...new Set(json_object_parse2.map(x => x.Asignatura))]);
+	console.log([...new Set(json_object_parse2.map(x => x.Asignatura))])
 }
 
 function find_in_object(my_array, my_criteria) {
@@ -187,12 +194,12 @@ function find_in_object(my_array, my_criteria) {
 		return Object.keys(my_criteria).every(function (key) {
 			return (Array.isArray(my_criteria[key]) && (my_criteria[key].some(function (criteria) {
 				return (typeof obj[key] === 'string' && obj[key].indexOf(criteria) !== -1)
-			})) || my_criteria[key].length === 0);
-		});
-	});
+			})) || my_criteria[key].length === 0)
+		})
+	})
 }
 
-function filter() {
+function filter2() {
 
 	let jsonData = [
 		{ "sn": "234234234", "pn": "1014143", "mft": "hello world", "sl": "GG07", "vtv": "Yes" },
@@ -204,7 +211,7 @@ function filter() {
 		sl: ["GG08", "GG07"],
 		vtv: ["Yes"]
 	}
-	console.log(find_in_object(jsonData, query)); //returns one
+	console.log(find_in_object(jsonData, query)) //returns one
 
 	let query2 = {
 		sn: ['T234834U', 'T23423423'],
@@ -213,7 +220,7 @@ function filter() {
 		sl: ['BB03', 'SFD04'],
 		vtv: ['Yes']
 	}
-	console.log(find_in_object(jsonData, query2)); //returns none
+	console.log(find_in_object(jsonData, query2)) //returns none
 }
 
 function drawTableWhitData() {
