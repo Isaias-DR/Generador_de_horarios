@@ -15,7 +15,7 @@
 	<script src="tree/main/JS/jquery.min.js"></script>
 	<script src="tree/main/JS/jszip.js"></script>
 	<script src="tree/main/JS/xlsx.js"></script>
-	<script src="tree/main/JS/uso_de_xlsx.js"></script>
+	<script src="tree/main/JS/uso_xlsx.js"></script>
 </head>
 
 <body>
@@ -52,9 +52,10 @@
 				<li>El uso de este sistema es para generar horarios.</li>
 				<li>El presente sistema tiene por finalidad: usar filtros, generar horarios segun filtros, diseña los
 					horarios por semana y lista los horarios.</li>
-				<li>Los datos que entregan son unicamente del archivo Excel.</li>
-				<li>Atribuir responsabilidad externa al sistema, no son correspondidos.</li>
-				</o l>
+				<li>Los datos que utiliza este sistema es unicamente del archivo Excel.</li>
+				<li>No se acaptan atribuciones de responsabilidad externa al sistema.</li>
+				<li>Ultima actualizazion: primer semestre de 2021</li>
+			</ol>
 		</div>
 
 		<div class="p-2">
@@ -64,8 +65,9 @@
 				<li>Leer cada parte de la presente pagína web.</li>
 				<li>Tener en una hoja Excel con una fila de los nombres de cada columna, y desde de esa fila tener
 					los datos correspondientes.</li>
-				<li>Cambiar los campos que estan en blanco en el archivo excel por un texto reconosible, se requiere
-					cambiarlos en la columna Nivel.</li>
+				<li>Los espacios de los nombres de las columnas, cambiarlos por un texto reconosible.</li>
+				<li>Los contenidos que esten en blanco, cambiarlos por un texto reconosible, verifique el contenido de
+					la columna Nivel.</li>
 			</ol>
 			<p><strong>Ejemplo:</strong></p>
 			<img src="tree/main/IMG/ejemplo.PNG" class="img-fluid"
@@ -83,45 +85,9 @@
 			</div>
 		</div>
 
-		<div class="p-2">
-			<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o
-				Profesor/a.</h6>
-			<div id="div_leaves" class="form-check"></div>
-		</div>
+		<div class="p-2 form-check" id="div_leaves"></div>
 
-		<div class="p-2">
-			<h6>3 - Elija el nombre adecuado con su contenido que se asemeje con lo que esta en el archivo Excel</h6>
-			<div class="row">
-				<div class="col-12 col-md-6 col-lg-4">
-					<div id="div_columns_name" class="form-check"></div>
-				</div>
-				<div class="col-12 col-md-6 col-lg-8">
-					<div id="div_columns_name2" class="form-check"></div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<h6>4 - Filtros</h6>
-			<div class="col-12 col-md-4">
-				<h6>Jornada</h6>
-				<div id="div_working_day" class="form-check"></div>
-			</div>
-			<div class="col-12 col-md-8">
-				<h6>Carrera</h6>
-				<div id="div_career" class="form-check"></div>
-			</div>
-		</div>
-		<div class="row">			
-			<div class="col-12 col-md-4">
-				<h6>Semenstres</h6>
-				<div id="div_semester" class="form-check"></div>
-			</div>
-			<div class="col-12 col-md-8">
-				<h6>Asignaturas</h6>
-				<div id="div_subjets" class="form-check"></div>
-			</div>
-		</div>
+		<div class="p-2" id="div_filters"></div>
 	</div>
 
 	<div class="bg-light">
