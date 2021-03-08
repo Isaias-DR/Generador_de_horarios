@@ -3,9 +3,9 @@ let distinctWorkingDay, distinctCourse, distinctSemester, distinctSubjets;
 let filterSubjets, selectionSubjets;
 let filterSection, selectionSection;
 let filterSchedule, selectionSchedule;
-var age, stringWorkingDay, stringCourse, stringNivel, stringSubjets;
+var stringWorkingDay, stringCourse, stringNivel, stringSubjets;
 var XL_row_object, json_object, json_object_parse, json_object_parse2, workbook;
-var dates2;
+var age, datesNew, datesOld;
 const dates = {
 	Jornada: [],
 	Carrera: [],
@@ -90,6 +90,7 @@ function compararArray() {
 	}
 
 	if (age == 2018 || age == 2017) {
+
 		document.getElementById("div_filters").innerHTML = ""
 		document.getElementById("div_filters").innerHTML +=
 			"<div class='row'><h6>3 - Filtros</h6><div class='col-12 col-md-4'><h6>Jornada</h6><div id='div_working_day' class='form-check'></div></div>" +
@@ -101,6 +102,7 @@ function compararArray() {
 		showSemester()
 		showSubject(1)
 	} else {
+
 		alert("Revise los nombre de las columnas con su contenido correspondiente")
 	}
 
@@ -164,16 +166,23 @@ function showSemester() {
 function showSubject(estado) {
 
 	if (estado == 1) {
+
 		if (age == 2018) {
+
 			distinctSubjets = [...new Set(json_object_parse.map(x => x.Asignatura))]
 		} else if (age == 2017) {
+
 			distinctSubjets = [...new Set(json_object_parse.map(x => x.Asignatura_en_malla))]
 		}
 	} else if (estado == 2) {
+
 		getValues(1)
+
 		if (age == 2018) {
+
 			distinctSubjets = [...new Set(json_object_parse2.map(x => x.Asignatura))]
 		} else if (age == 2017) {
+
 			distinctSubjets = [...new Set(json_object_parse2.map(x => x.Asignatura_en_malla))]
 		}
 	}
@@ -192,6 +201,7 @@ function showSubject(estado) {
 }
 
 function getValues(estatus) {
+
 	let selectElement1 = document.getElementById('working_day')
 	let selectedValues1 = Array.from(selectElement1.selectedOptions).map(option => option.value)
 
@@ -218,6 +228,7 @@ function getValues(estatus) {
 }
 
 function find_in_object(my_array, my_criteria) {
+
 	return my_array.filter(function (obj) {
 		return Object.keys(my_criteria).every(function (key) {
 			return (Array.isArray(my_criteria[key]) && (my_criteria[key].some(function (criteria) {
@@ -228,12 +239,16 @@ function find_in_object(my_array, my_criteria) {
 }
 
 function clone(obj) {
+
 	if (obj === null || typeof obj !== 'object') {
+
 		return obj
 	}
 
 	var temp = obj.constructor();
+
 	for (var key in obj) {
+
 		temp[key] = clone(obj[key])
 	}
 
@@ -256,21 +271,21 @@ function filterCareer() {
 	}
 	*/
 
-	dates2 = clone(dates) // Tambien se puede recorrer selectedValues4
+	datesNew = clone(dates) // Tambien se puede recorrer selectedValues4
 
-	console.log(dates2) // Tiene todos las propiedades
+	console.log(datesNew) // Tiene todos las propiedades
 
 	for (let p = 0; p < dates.Asignatura.length; p++) {
 
 		rebuild1()
 		rebuild2()
 
-		dates2.Asignatura = [dates.Asignatura[p]] // Adapta el dates2 solo para esa asignatura con los datos nesesarios para filtrar
+		datesNew.Asignatura = [dates.Asignatura[p]] // Adapta el datesNew solo para esa asignatura con los datos nesesarios para filtrar
 
-		console.log("Asignatura nro. " + p)
-		console.log(dates2.Asignatura)
+		// console.log("Asignatura nro. " + p)
+		// console.log(datesNew.Asignatura)
 
-		filterSubjets = find_in_object(json_object_parse2, dates2) // filtra solo los datos de esa asignatura
+		filterSubjets = find_in_object(json_object_parse2, datesNew) // filtra solo los datos de esa asignatura
 
 		selectionSubjets = [...new Set(filterSubjets.map(x => x.Sección))] // obtiene unicamente las secciones de esa asignatura
 
@@ -278,29 +293,26 @@ function filterCareer() {
 
 			rebuild2()
 
-			dates2.Sección = [selectionSubjets[q]] // Adapta el dates2 solo para esa sección con los datos nesesarios para filtrar
+			datesNew.Sección = [selectionSubjets[q]] // Adapta el datesNew solo para esa sección con los datos nesesarios para filtrar
 
-			console.log("Sección nro. " + q)
-			console.log(dates2.Sección)
+			// console.log("Sección nro. " + q)
+			// console.log(datesNew.Sección)
 
-			filterSection = find_in_object(json_object_parse2, dates2) // filtra solo los datos de esa sección
+			filterSection = find_in_object(json_object_parse2, datesNew) // filtra solo los datos de esa sección
 
 			selectionSection = Array.from(new Set(filterSection.map(s => s.Horario)))
-				.map(Horario => {
-					return {
-						Horario: Horario,
-						Día: filterSection.find(s => s.Horario === Horario).Día
-					}
-				}) // obtiene unicamente los horarios y su correspondiente dia de esa sección
+				.map(Horario => { return { Horario: Horario, Día: filterSection.find(s => s.Horario === Horario).Día } })
+			// obtiene unicamente los horarios y su correspondiente dia de esa sección
 
 			for (let r = 0; r < selectionSection.length; r++) {
-				
-				dates2.horaInicio = [selectionSection[r].Horario.split(" ")[1]] // Adapta el dates2 solo para ese horario con los datos nesesarios para filtrar
-				dates2.horaFin = [selectionSection[r].Horario.split(" ")[3]]
-				dates2.día = [selectionSection[r].Día]
 
-				console.log("Horario nro. " + r)
-				console.log(dates2.horaInicio + " " + dates2.horaFin + " " + dates2.día)
+				datesNew.horaInicio = [selectionSection[r].Horario.split(" ")[1]] // Adapta el datesNew solo para ese horario con los datos nesesarios para filtrar
+				datesNew.horaFin = [selectionSection[r].Horario.split(" ")[3]]
+				datesNew.día = [selectionSection[r].Día]
+
+				// console.log("Horario nro. " + r)
+				// console.log(datesNew.horaInicio + " " + datesNew.horaFin + " " + datesNew.día)
+				console.log(datesNew)
 			}
 		}
 	}
@@ -308,14 +320,14 @@ function filterCareer() {
 
 function rebuild1() {
 
-	dates2.Sección = [] // Reinicio, para que la ultima sección no entorpesca a la asignatura siguiente, estuve harto tiempo buscando la solución
+	datesNew.Sección = [] // Reinicio, para que la ultima sección no entorpesca a la asignatura siguiente, estuve harto tiempo buscando la solución
 }
 
 function rebuild2() {
 
-	dates2.horaInicio = []
-	dates2.horaFin = []
-	dates2.día = []
+	datesNew.horaInicio = []
+	datesNew.horaFin = []
+	datesNew.día = []
 }
 
 function drawTableWhitData() {
