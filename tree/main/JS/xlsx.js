@@ -11394,7 +11394,7 @@ function readSync(data, opts) {
 		case 0x50:
 			if(isfile) o.type = "file";
 			return read_zip(data, opts);
-		default: throw new Error("Unsupported file " + n);
+		default: throw new Error("Unsupported file " + n), alert("Revise el tipo de archivo, deve ser Excel");
 	}
 }
 

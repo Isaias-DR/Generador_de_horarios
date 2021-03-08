@@ -1,15 +1,19 @@
 let columns_name, columns_name_selected;
-let distinctWorkingDay, distinctCourse, distinctSemester, distinctSubjets;
-let filterWorkingDay, filterCourse, filterSemester, filterSubjets;
-var año, stringWorkingDay, stringCourse, stringNivel, stringSubjets;
-var XL_row_object, json_object, json_object_parse, json_object_parse2, workbook, index_name_subjet;
+let distinctWorkingDay, distinctCourse, distinctSemester;
+let distinctSubjets, filterSubjets, selectionSubjets;
+let distinctSection, filterSection, selectionSection;
+let distinctSchedule, filterSchedule, selectionSchedule;
+var age, stringWorkingDay, stringCourse, stringNivel, stringSubjets;
+var XL_row_object, json_object, json_object_parse, json_object_parse2, workbook;
+var dates2;
 const dates = {
 	Jornada: [],
 	Carrera: [],
 	Nivel: [],
 	Asignatura: [],
-	Sección: []
-}, dates2 = {};
+	Sección: [],
+	Horario: []
+};
 
 function handleFileSelect(evt) {
 
@@ -31,12 +35,14 @@ class ExcelToJSON {
 
 				// Recorrer las hojas del Excel
 				document.getElementById("div_leaves").innerHTML = ""
-				document.getElementById("div_leaves").innerHTML = document.getElementById("div_leaves").innerHTML + "<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o Profesor/a.</h6>"
+				document.getElementById("div_leaves").innerHTML +=
+					"<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o Profesor/a.</h6>"
 
 				workbook.SheetNames.forEach(function (sheetName) {
 
-					document.getElementById("div_leaves").innerHTML = document.getElementById("div_leaves").innerHTML +
-						"<div class='form-check'><input class='form-check-input' type='radio' id='leaves' name='leaves' value='" + sheetName + "' onchange='handleChange(event)' >" +
+					document.getElementById("div_leaves").innerHTML +=
+						"<div class='form-check'><input class='form-check-input' type='radio' id='leaves' name='leaves' value='"
+						+ sheetName + "' onchange='handleChange(event)' >" +
 						"<label class='form-check-label' for='" + sheetName + "'>" + sheetName + "</label></div>"
 				})
 			}
@@ -76,14 +82,18 @@ function compararArray() {
 	columns_name = Object.getOwnPropertyNames(json_object_parse[leave])
 
 	if (columns_name.includes("Asignatura")) {
-		año = 2018
+		age = 2018
 	} else if (columns_name.includes("Asignatura programada")) {
-		año = 2017
+		age = 2017
 	}
 
-	if (año == 2018 || año == 2017) {
+	if (age == 2018 || age == 2017) {
 		document.getElementById("div_filters").innerHTML = ""
-		document.getElementById("div_filters").innerHTML = document.getElementById("div_filters").innerHTML + "<div class='row'><h6>3 - Filtros</h6><div class='col-12 col-md-4'><h6>Jornada</h6><div id='div_working_day' class='form-check'></div></div><div class='col-12 col-md-8'><h6>Carrera</h6><div id='div_career' class='form-check'></div></div></div><div class='row'><div class='col-12 col-md-4'><h6>Semenstres</h6><div id='div_semester' class='form-check'></div></div><div class='col-12 col-md-8'><h6>Asignaturas (requerida selección)</h6><div id='div_subjets' class='form-check'></div></div></div>"
+		document.getElementById("div_filters").innerHTML +=
+			"<div class='row'><h6>3 - Filtros</h6><div class='col-12 col-md-4'><h6>Jornada</h6><div id='div_working_day' class='form-check'></div></div>" +
+			"<div class='col-12 col-md-8'><h6>Carrera</h6><div id='div_career' class='form-check'></div></div></div><div class='row'>" +
+			"<div class='col-12 col-md-4'><h6>Semenstres</h6><div id='div_semester' class='form-check'></div></div>" +
+			"<div class='col-12 col-md-8'><h6>Asignaturas (requerida selección)</h6><div id='div_subjets' class='form-check'></div></div></div>"
 		showWorkingDay()
 		showCareer()
 		showSemester()
@@ -111,7 +121,7 @@ function showWorkingDay() {
 
 		stringWorkingDay = stringWorkingDay + "<option>" + distinctWorkingDay[m] + "</option>"
 	}
-	document.getElementById("div_working_day").innerHTML = document.getElementById("div_working_day").innerHTML +
+	document.getElementById("div_working_day").innerHTML +=
 		"<select multiple class='form-control' id='working_day' onchange='showSubject(2)'>" + stringWorkingDay + "</select>"
 }
 
@@ -127,7 +137,7 @@ function showCareer() {
 
 		stringCourse = stringCourse + "<option>" + distinctCourse[n] + "</option>"
 	}
-	document.getElementById("div_career").innerHTML = document.getElementById("div_career").innerHTML +
+	document.getElementById("div_career").innerHTML +=
 		"<select multiple class='form-control' id='career' onchange='showSubject(2)'>" + stringCourse + "</select>"
 }
 
@@ -145,23 +155,23 @@ function showSemester() {
 
 		stringNivel = stringNivel + "<option>" + distinctSemester[ñ] + "</option>"
 	}
-	document.getElementById("div_semester").innerHTML = document.getElementById("div_semester").innerHTML +
+	document.getElementById("div_semester").innerHTML +=
 		"<select multiple class='form-control' id='nivel' onchange='showSubject(2)'>" + stringNivel + "</select>"
 }
 
 function showSubject(estado) {
 
 	if (estado == 1) {
-		if (año == 2018) {
+		if (age == 2018) {
 			distinctSubjets = [...new Set(json_object_parse.map(x => x.Asignatura))]
-		} else if (año == 2017) {
+		} else if (age == 2017) {
 			distinctSubjets = [...new Set(json_object_parse.map(x => x.Asignatura_en_malla))]
 		}
 	} else if (estado == 2) {
 		getValues(1)
-		if (año == 2018) {
+		if (age == 2018) {
 			distinctSubjets = [...new Set(json_object_parse2.map(x => x.Asignatura))]
-		} else if (año == 2017) {
+		} else if (age == 2017) {
 			distinctSubjets = [...new Set(json_object_parse2.map(x => x.Asignatura_en_malla))]
 		}
 	}
@@ -174,8 +184,9 @@ function showSubject(estado) {
 
 		stringSubjets = stringSubjets + "<option>" + distinctSubjets[o] + "</option>"
 	}
-	document.getElementById("div_subjets").innerHTML = document.getElementById("div_subjets").innerHTML +
-		"<select multiple class='form-control' id='subjets'>" + stringSubjets + "</select><div class='p-2'><button class='btn btn-secondary' onclick='getValues(2)'>Generar Horarios</button></div>"
+	document.getElementById("div_subjets").innerHTML +=
+		"<select multiple class='form-control' id='subjets'>" + stringSubjets +
+		"</select><div class='p-2'><button class='btn btn-secondary' onclick='getValues(2)'>Generar Horarios</button></div>"
 }
 
 function getValues(estatus) {
@@ -199,7 +210,7 @@ function getValues(estatus) {
 	json_object_parse2 = find_in_object(json_object_parse, dates)
 
 	if (estatus === 2) {
-		console.log(dates)
+
 		filterCareer()
 	}
 }
@@ -214,9 +225,21 @@ function find_in_object(my_array, my_criteria) {
 	})
 }
 
+function clone(obj) {
+	if (obj === null || typeof obj !== 'object') {
+		return obj
+	}
+
+	var temp = obj.constructor();
+	for (var key in obj) {
+		temp[key] = clone(obj[key])
+	}
+
+	return temp
+}
+
 function filterCareer() {
 
-	dates2 = dates
 	/*
 	let asignatura = {
 		nombreA = "",
@@ -231,14 +254,49 @@ function filterCareer() {
 	}
 	*/
 
+	dates2 = clone(dates) // Tambien se puede recorrer selectedValues4
+
+	console.log(dates2) // Tiene todos las propiedades
+
 	for (let p = 0; p < dates.Asignatura.length; p++) {
-		dates2.Asignatura = dates.Asignatura[p]
 
-		const seccionesDeEsaAsignatura = find_in_object(json_object_parse, dates)
-		console.log(seccionesDeEsaAsignatura)
+		rebuild()
+
+		dates2.Asignatura = [dates.Asignatura[p]] // Adapta el dates2 solo para esa asignatura con los datos nesesarios para filtrar
+
+		console.log("Asignatura nro. " + p)
+		console.log(dates2.Asignatura)
+
+		filterSubjets = find_in_object(json_object_parse2, dates2) // filtra solo los datos de esa asignatura
+
+		selectionSubjets = [...new Set(filterSubjets.map(x => x.Sección))] // obtiene unicamente las secciones de esa asignatura
+
+		for (let q = 0; q < selectionSubjets.length; q++) {
+
+			dates2.Sección = [selectionSubjets[q]] // Adapta el dates2 solo para esa sección con los datos nesesarios para filtrar
+
+			console.log("Sección nro. " + q)
+			console.log(dates2.Sección)
+
+			filterSection = find_in_object(json_object_parse2, dates2) // filtra solo los datos de esa sección
+
+			selectionSection = [...new Set(filterSection.map(x => x.Horario))] // obtiene unicamente los horarios de esa sección
+			
+			for (let r = 0; r < selectionSection.length; r++) {
+
+				dates2.Horario = [selectionSection[r]] // Adapta el dates2 solo para ese horario con los datos nesesarios para filtrar
+
+				console.log("Horario nro. " + r)
+				console.log(dates2.Horario)
+			}
+		}
 	}
+}
 
-	console.log(json_object_parse2)
+function rebuild() {
+
+	dates2.Sección = [] // Reinicio, para que la ultima sección no entorpesca a la asignatura siguiente, estuve harto tiempo buscando la solución
+	dates2.Horario = []
 }
 
 function drawTableWhitData() {
