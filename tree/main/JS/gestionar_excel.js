@@ -1,8 +1,8 @@
 let columns_name, columns_name_selected;
-let distinctWorkingDay, distinctCourse, distinctSemester;
-let distinctSubjets, filterSubjets, selectionSubjets;
-let distinctSection, filterSection, selectionSection;
-let distinctSchedule, filterSchedule, selectionSchedule;
+let distinctWorkingDay, distinctCourse, distinctSemester, distinctSubjets;
+let filterSubjets, selectionSubjets;
+let filterSection, selectionSection;
+let filterSchedule, selectionSchedule;
 var age, stringWorkingDay, stringCourse, stringNivel, stringSubjets;
 var XL_row_object, json_object, json_object_parse, json_object_parse2, workbook;
 var dates2;
@@ -12,7 +12,9 @@ const dates = {
 	Nivel: [],
 	Asignatura: [],
 	Sección: [],
-	Horario: []
+	horaInicio: [],
+	horaFin: [],
+	día: []
 };
 
 function handleFileSelect(evt) {
@@ -260,7 +262,8 @@ function filterCareer() {
 
 	for (let p = 0; p < dates.Asignatura.length; p++) {
 
-		rebuild()
+		rebuild1()
+		rebuild2()
 
 		dates2.Asignatura = [dates.Asignatura[p]] // Adapta el dates2 solo para esa asignatura con los datos nesesarios para filtrar
 
@@ -273,6 +276,8 @@ function filterCareer() {
 
 		for (let q = 0; q < selectionSubjets.length; q++) {
 
+			rebuild2()
+
 			dates2.Sección = [selectionSubjets[q]] // Adapta el dates2 solo para esa sección con los datos nesesarios para filtrar
 
 			console.log("Sección nro. " + q)
@@ -280,23 +285,37 @@ function filterCareer() {
 
 			filterSection = find_in_object(json_object_parse2, dates2) // filtra solo los datos de esa sección
 
-			selectionSection = [...new Set(filterSection.map(x => x.Horario))] // obtiene unicamente los horarios de esa sección
-			
-			for (let r = 0; r < selectionSection.length; r++) {
+			selectionSection = Array.from(new Set(filterSection.map(s => s.Horario)))
+				.map(Horario => {
+					return {
+						Horario: Horario,
+						Día: filterSection.find(s => s.Horario === Horario).Día
+					}
+				}) // obtiene unicamente los horarios y su correspondiente dia de esa sección
 
-				dates2.Horario = [selectionSection[r]] // Adapta el dates2 solo para ese horario con los datos nesesarios para filtrar
+			for (let r = 0; r < selectionSection.length; r++) {
+				
+				dates2.horaInicio = [selectionSection[r].Horario.split(" ")[1]] // Adapta el dates2 solo para ese horario con los datos nesesarios para filtrar
+				dates2.horaFin = [selectionSection[r].Horario.split(" ")[3]]
+				dates2.día = [selectionSection[r].Día]
 
 				console.log("Horario nro. " + r)
-				console.log(dates2.Horario)
+				console.log(dates2.horaInicio + " " + dates2.horaFin + " " + dates2.día)
 			}
 		}
 	}
 }
 
-function rebuild() {
+function rebuild1() {
 
 	dates2.Sección = [] // Reinicio, para que la ultima sección no entorpesca a la asignatura siguiente, estuve harto tiempo buscando la solución
-	dates2.Horario = []
+}
+
+function rebuild2() {
+
+	dates2.horaInicio = []
+	dates2.horaFin = []
+	dates2.día = []
 }
 
 function drawTableWhitData() {

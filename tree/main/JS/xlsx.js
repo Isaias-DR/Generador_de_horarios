@@ -11402,6 +11402,7 @@ function readFileSync(data, opts) {
 	var o = opts||{}; o.type = 'file';
 	return readSync(data, o);
 }
+
 function write_zip_type(wb, opts) {
 	var o = opts||{};
 	var z = write_zip(wb, o);
