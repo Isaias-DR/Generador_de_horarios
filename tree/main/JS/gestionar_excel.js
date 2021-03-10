@@ -34,17 +34,21 @@ var valueSpecific = {
 
 let arraySubjets = []
 
+const valueSchedule = {
+	day: "",
+	hourStart: "",
+	hourEnd: ""
+}
+
+const valueSection = {
+	nombreS: "",
+	horario: valueSchedule
+}
+
 const valueSubjet = {
 	nombreA: "",
 	section: [
-		{
-			nombreS: "",
-			horario: {
-				day: "",
-				hourStart: "",
-				hourEnd: ""
-			}
-		}
+		valueSection
 	]
 }
 
@@ -290,10 +294,6 @@ function clone(obj) {
 
 function filterCareer() {
 
-	// valueSpecific = clone(valueGeneral) // Tambien se puede recorrer selectedValuesSubjets
-
-	// console.log(valueSpecific) // Tiene todos las propiedades
-
 	for (let p = 0; p < selectedValuesSubjets.length; p++) {
 
 		rebuild1_1()
@@ -301,8 +301,9 @@ function filterCareer() {
 
 		valueSpecific.Asignatura = [selectedValuesSubjets[p]] // Adapta el valueSpecific solo para esa asignatura con los datos nesesarios para filtrar
 
-		// console.log("Asignatura nro. " + p)
-		// console.log(valueSpecific.Asignatura)
+		valueSubjet.nombreA = valueSpecific.Asignatura
+
+		arraySubjets.push(valueSubjet)
 
 		filterSubjets = find_in_object(json_object_parse2, valueSpecific) // filtra solo los datos de esa asignatura
 
@@ -312,15 +313,15 @@ function filterCareer() {
 
 			rebuild1_2()
 
-			valueSpecific.Sección = [selectionSubjets[q]] // Adapta el valueSpecific solo para esa sección con los datos nesesarios para filtrar			
+			valueSpecific.Sección = [selectionSubjets[q]] // Adapta el valueSpecific solo para esa sección con los datos nesesarios para filtrar
 
-			// console.log("Sección nro. " + q)
-			// console.log(valueSpecific.Sección)
+			valueSection.nombreS = valueSpecific.Sección
+
+			arraySubjets[arraySubjets.length - 1].section.push(valueSection)
 
 			filterSection = find_in_object(json_object_parse2, valueSpecific) // filtra solo los datos de esa sección
 
-			selectionSection = Array.from(new Set(filterSection.map(s => s.Horario)))
-				.map(Horario => { return { Horario: Horario, Día: filterSection.find(s => s.Horario === Horario).Día } })
+			selectionSection = Array.from(new Set(filterSection.map(s => s.Horario))).map(Horario => { return { Horario: Horario, Día: filterSection.find(s => s.Horario === Horario).Día } })
 
 			for (let r = 0; r < selectionSection.length; r++) {
 
@@ -332,10 +333,13 @@ function filterCareer() {
 				arrayHour = stringHourStart.split(":")
 				valueSpecific.HoraFin = parseInt(arrayHour[0]) * 3600 + parseInt(arrayHour[1]) * 60
 
-				// console.log("Horario nro. " + r)
-				// console.log(valueSpecific.Día + " " + valueSpecific.HoraInicio + " " + valueSpecific.HoraFin)
+				valueSchedule.day = valueSpecific.Día
+				valueSchedule.hourStart = valueSpecific.HoraInicio
+				valueSchedule.hourEnd = valueSpecific.HoraFin
+
+				arraySubjets[arraySubjets.length - 1].section[arraySubjets[arraySubjets.length - 1].section.length].horario = valueSchedule
+
 				console.log(valueSpecific.Asignatura + " " + valueSpecific.Sección + " " + valueSpecific.Día + " " + valueSpecific.HoraInicio + " " + valueSpecific.HoraFin)
-				// console.log(valueSpecific)
 			}
 		}
 	}
