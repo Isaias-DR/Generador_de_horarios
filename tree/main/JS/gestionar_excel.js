@@ -1,21 +1,53 @@
-let columns_name, columns_name_selected;
+let columns_name;
 let distinctWorkingDay, distinctCourse, distinctSemester, distinctSubjets;
 let filterSubjets, selectionSubjets;
 let filterSection, selectionSection;
-let filterSchedule, selectionSchedule;
 var stringWorkingDay, stringCourse, stringNivel, stringSubjets;
+let selectedValuesSubjets
 var XL_row_object, json_object, json_object_parse, json_object_parse2, workbook;
-var age, datesNew, datesOld;
-const dates = {
+var age
+
+const valueGeneral = {
+
+	Año: [],
+	Período: [],
+	Sede: [],
+	Escuela: [],
+	Carrera: [],
+	Plan: [],
+	Tipo_Plan_de_Estudio: [],
 	Jornada: [],
 	Carrera: [],
-	Nivel: [],
+	Nivel: []
+}
+
+var valueSpecific = {
+
 	Asignatura: [],
 	Sección: [],
-	horaInicio: [],
-	horaFin: [],
-	día: []
-};
+	Docente: "",
+	HoraInicio: 0,
+	HoraFin: 0,
+	Día: "",
+	Sala: ""
+}
+
+let arraySubjets = []
+
+const valueSubjet = {
+	nombreA: "",
+	section: [
+		{
+			nombreS: "",
+			horario: {
+				day: "",
+				hourStart: "",
+				hourEnd: ""
+			}
+		}
+	]
+}
+
 
 function handleFileSelect(evt) {
 
@@ -25,7 +57,9 @@ function handleFileSelect(evt) {
 }
 
 class ExcelToJSON {
+
 	constructor() {
+
 		this.parseExcel = function (file) {
 
 			var reader = new FileReader()
@@ -70,7 +104,6 @@ function handleChange(e) {
 }
 
 function compararArray() {
-
 
 	var leave
 	var checkboxArray = document.getElementsByName("leaves")
@@ -202,24 +235,24 @@ function showSubject(estado) {
 
 function getValues(estatus) {
 
-	let selectElement1 = document.getElementById('working_day')
-	let selectedValues1 = Array.from(selectElement1.selectedOptions).map(option => option.value)
+	let selectElementWorkingDay = document.getElementById('working_day')
+	let selectedValuesWorkingDay = Array.from(selectElementWorkingDay.selectedOptions).map(option => option.value)
 
-	let selectElement2 = document.getElementById('career')
-	let selectedValues2 = Array.from(selectElement2.selectedOptions).map(option => option.value)
+	let selectElementCareer = document.getElementById('career')
+	let selectedValuesCareer = Array.from(selectElementCareer.selectedOptions).map(option => option.value)
 
-	let selectElement3 = document.getElementById('nivel')
-	let selectedValues3 = Array.from(selectElement3.selectedOptions).map(option => option.value)
+	let selectElementNivel = document.getElementById('nivel')
+	let selectedValuesNivel = Array.from(selectElementNivel.selectedOptions).map(option => option.value)
 
-	let selectElement4 = document.getElementById('subjets')
-	let selectedValues4 = Array.from(selectElement4.selectedOptions).map(option => option.value)
+	let selectElementSubjets = document.getElementById('subjets')
+	selectedValuesSubjets = Array.from(selectElementSubjets.selectedOptions).map(option => option.value)
 
-	dates.Jornada = selectedValues1
-	dates.Carrera = selectedValues2
-	dates.Nivel = selectedValues3
-	dates.Asignatura = selectedValues4
+	valueGeneral.Jornada = selectedValuesWorkingDay
+	valueGeneral.Carrera = selectedValuesCareer
+	valueGeneral.Nivel = selectedValuesNivel
+	valueGeneral.Asignatura = selectedValuesSubjets
 
-	json_object_parse2 = find_in_object(json_object_parse, dates)
+	json_object_parse2 = find_in_object(json_object_parse, valueGeneral)
 
 	if (estatus === 2) {
 
@@ -257,77 +290,69 @@ function clone(obj) {
 
 function filterCareer() {
 
-	/*
-	let asignatura = {
-		nombreA = "",
-		section = {
-			nombreS = "",
-			horario = {
-				nombreH = "",
-				hInicio = "",
-				hFin = ""
-			}
-		}
-	}
-	*/
+	// valueSpecific = clone(valueGeneral) // Tambien se puede recorrer selectedValuesSubjets
 
-	datesNew = clone(dates) // Tambien se puede recorrer selectedValues4
+	// console.log(valueSpecific) // Tiene todos las propiedades
 
-	console.log(datesNew) // Tiene todos las propiedades
+	for (let p = 0; p < selectedValuesSubjets.length; p++) {
 
-	for (let p = 0; p < dates.Asignatura.length; p++) {
+		rebuild1_1()
+		rebuild1_2()
 
-		rebuild1()
-		rebuild2()
-
-		datesNew.Asignatura = [dates.Asignatura[p]] // Adapta el datesNew solo para esa asignatura con los datos nesesarios para filtrar
+		valueSpecific.Asignatura = [selectedValuesSubjets[p]] // Adapta el valueSpecific solo para esa asignatura con los datos nesesarios para filtrar
 
 		// console.log("Asignatura nro. " + p)
-		// console.log(datesNew.Asignatura)
+		// console.log(valueSpecific.Asignatura)
 
-		filterSubjets = find_in_object(json_object_parse2, datesNew) // filtra solo los datos de esa asignatura
+		filterSubjets = find_in_object(json_object_parse2, valueSpecific) // filtra solo los datos de esa asignatura
 
 		selectionSubjets = [...new Set(filterSubjets.map(x => x.Sección))] // obtiene unicamente las secciones de esa asignatura
 
 		for (let q = 0; q < selectionSubjets.length; q++) {
 
-			rebuild2()
+			rebuild1_2()
 
-			datesNew.Sección = [selectionSubjets[q]] // Adapta el datesNew solo para esa sección con los datos nesesarios para filtrar
+			valueSpecific.Sección = [selectionSubjets[q]] // Adapta el valueSpecific solo para esa sección con los datos nesesarios para filtrar			
 
 			// console.log("Sección nro. " + q)
-			// console.log(datesNew.Sección)
+			// console.log(valueSpecific.Sección)
 
-			filterSection = find_in_object(json_object_parse2, datesNew) // filtra solo los datos de esa sección
+			filterSection = find_in_object(json_object_parse2, valueSpecific) // filtra solo los datos de esa sección
 
 			selectionSection = Array.from(new Set(filterSection.map(s => s.Horario)))
 				.map(Horario => { return { Horario: Horario, Día: filterSection.find(s => s.Horario === Horario).Día } })
-			// obtiene unicamente los horarios y su correspondiente dia de esa sección
 
 			for (let r = 0; r < selectionSection.length; r++) {
 
-				datesNew.horaInicio = [selectionSection[r].Horario.split(" ")[1]] // Adapta el datesNew solo para ese horario con los datos nesesarios para filtrar
-				datesNew.horaFin = [selectionSection[r].Horario.split(" ")[3]]
-				datesNew.día = [selectionSection[r].Día]
+				valueSpecific.Día = selectionSection[r].Día
+				var stringHourStart = selectionSection[r].Horario.split(" ")[1]
+				let arrayHour = stringHourStart.split(":")
+				valueSpecific.HoraInicio = parseInt(arrayHour[0]) * 3600 + parseInt(arrayHour[1]) * 60 // Adapta el valueSpecific solo para ese horario con los datos nesesarios para filtrar
+				stringHourStart = selectionSection[r].Horario.split(" ")[3]
+				arrayHour = stringHourStart.split(":")
+				valueSpecific.HoraFin = parseInt(arrayHour[0]) * 3600 + parseInt(arrayHour[1]) * 60
 
 				// console.log("Horario nro. " + r)
-				// console.log(datesNew.horaInicio + " " + datesNew.horaFin + " " + datesNew.día)
-				console.log(datesNew)
+				// console.log(valueSpecific.Día + " " + valueSpecific.HoraInicio + " " + valueSpecific.HoraFin)
+				console.log(valueSpecific.Asignatura + " " + valueSpecific.Sección + " " + valueSpecific.Día + " " + valueSpecific.HoraInicio + " " + valueSpecific.HoraFin)
+				// console.log(valueSpecific)
 			}
 		}
 	}
 }
 
-function rebuild1() {
+function rebuild1_1() {
 
-	datesNew.Sección = [] // Reinicio, para que la ultima sección no entorpesca a la asignatura siguiente, estuve harto tiempo buscando la solución
+	valueSpecific.Sección = [] // Reinicio, para que la ultima sección no entorpesca a la asignatura siguiente, estuve harto tiempo buscando la solución
+	valueSubjet.nombreA = []
+	valueSubjet.section = []
 }
 
-function rebuild2() {
+function rebuild1_2() {
 
-	datesNew.horaInicio = []
-	datesNew.horaFin = []
-	datesNew.día = []
+	valueSpecific.HoraInicio = ""
+	valueSpecific.HoraFin = ""
+	valueSpecific.Día = ""
 }
 
 function drawTableWhitData() {
