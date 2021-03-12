@@ -32,7 +32,7 @@ var valueSpecific = {
 	Sala: ""
 }
 
-let arraySubjets = []
+let arraySubjets
 
 // var valueSubjet = {
 // 	nombreA: "A1",
@@ -348,6 +348,8 @@ function clone(obj) {
 
 function filterCareer() {
 
+	arraySubjets = []
+
 	for (let p = 0; p < selectedValuesSubjets.length; p++) {
 
 		rebuild1_1()
@@ -405,12 +407,15 @@ function filterCareer() {
 					hourEnd: valueSpecific.HoraFin
 				}
 
-				arraySubjets[arraySubjets.length - 1].section[arraySubjets[arraySubjets.length - 1].section.length - 1].horario.push(valueSchedule)
+				a = arraySubjets.length - 1
+				b = arraySubjets[a].section.length - 1
+				arraySubjets[a].section[b].horario.push(valueSchedule)
 				// No sirve si uno crea por defecto los atributos inicialisados con "", {} o [], aquello es considerado como un atributo mas del array y entorpecera el proseso de asignación en el FOR
 			}
 		}
 	}
 	console.log(valueSubjet)
+	// Verificar directamente en la consola valueSubjet, porque solo muestra la ultima asignatura 
 }
 
 function rebuild1_1() {
