@@ -6,6 +6,7 @@ var stringWorkingDay, stringCourse, stringNivel, stringSubjets;
 let selectedValuesSubjets
 var XL_row_object, json_object, json_object_parse, json_object_parse2, workbook;
 var age
+let arraySubjets
 
 const valueGeneral = {
 
@@ -31,81 +32,6 @@ var valueSpecific = {
 	HoraFin: 0,
 	Sala: ""
 }
-
-let arraySubjets
-
-// var valueSubjet = {
-// 	nombreA: "A1",
-// 	section: []
-// }
-
-// arraySubjets.push(valueSubjet)
-
-// var valueSection = {
-// 	nombreS: "A1S1",
-// 	horario: []
-// }
-
-// arraySubjets[arraySubjets.length - 1].section.push(valueSection)
-
-// var valueSchedule = {
-// 	day: "Jueves",
-// 	hourStart: 10,
-// 	hourEnd: 20
-// }
-
-// arraySubjets[arraySubjets.length - 1].section[arraySubjets[arraySubjets.length - 1].section.length - 1].horario.push(valueSchedule)
-
-// var valueSchedule2 = {
-// 	day: "Miercoes",
-// 	hourStart: 20,
-// 	hourEnd: 40
-// }
-
-// arraySubjets[arraySubjets.length - 1].section[arraySubjets[arraySubjets.length - 1].section.length - 1].horario.push(valueSchedule2)
-
-// console.log(arraySubjets)
-
-
-
-
-// arraySubjets[arraySubjets.length - 1].section.push(valueSection)
-
-// arraySection = arraySubjets[0].section
-// console.log(arraySection)
-// var valueSection = {
-// 	nombreS: "A1S2",
-// 	horario: []
-// }
-// var arraySection2 = [
-// 	{ nombreS: "A1S2", horario: [] },
-// 	{ nombreS: "A1S3", horario: [] }
-// ]
-// filtroSection = arraySubjets[arraySubjets.length - 1].section.find(a => a.nombreS === valueSection.nombreS);
-
-
-// if (filtroSection == undefined) {
-
-// 	console.log('no existe')
-// } else {
-
-// 	console.log(filtroSection)
-// 	console.log(filtroSection.nombreS)
-// 	console.log(filtroSection.nombreS == valueSection.nombreS)
-// 	if (filtroSection.nombreS == valueSection.nombreS) {
-// 		console.log('ya existe')
-// 	}
-// }
-
-
-
-
-
-
-
-
-
-
 
 function handleFileSelect(evt) {
 
@@ -143,7 +69,7 @@ class ExcelToJSON {
 
 			reader.onerror = function (ex) {
 
-				console.log(ex)
+				console.warn(ex)
 			}
 
 			reader.readAsBinaryString(file)
@@ -158,10 +84,10 @@ function handleChange(e) {
 	json_object = JSON.stringify(XL_row_object) // texto - stringify combierte un objeto o valor a una cadena de texto
 	json_object_parse = JSON.parse(json_object) // JSON - analiza una cadena de texto como JSON, transformando opcionalmente  el valor producido por el análisis.
 
-	compararArray()
+	comparerArray()
 }
 
-function compararArray() {
+function comparerArray() {
 
 	var leave
 	var checkboxArray = document.getElementsByName("leaves")
@@ -329,23 +255,6 @@ function find_in_object(my_array, my_criteria) {
 	})
 }
 
-function clone(obj) {
-
-	if (obj === null || typeof obj !== 'object') {
-
-		return obj
-	}
-
-	var temp = obj.constructor();
-
-	for (var key in obj) {
-
-		temp[key] = clone(obj[key])
-	}
-
-	return temp
-}
-
 function filterCareer() {
 
 	arraySubjets = []
@@ -399,8 +308,6 @@ function filterCareer() {
 				arrayHour = stringHourStart.split(":")
 				valueSpecific.HoraFin = parseInt(arrayHour[0]) * 3600 + parseInt(arrayHour[1]) * 60
 
-				console.log(valueSpecific.Asignatura + " " + valueSpecific.Sección + " " + valueSpecific.Día + " " + valueSpecific.HoraInicio + " " + valueSpecific.HoraFin)
-
 				var valueSchedule = {
 					day: valueSpecific.Día,
 					hourStart: valueSpecific.HoraInicio,
@@ -414,8 +321,10 @@ function filterCareer() {
 			}
 		}
 	}
-	console.log(valueSubjet)
-	// Verificar directamente en la consola valueSubjet, porque solo muestra la ultima asignatura 
+
+	// Verificar directamente en la consola valueSubjet, porque solo muestra la ultima asignatura
+
+	searchSchedules()
 }
 
 function rebuild1_1() {
@@ -428,6 +337,10 @@ function rebuild1_2() {
 	valueSpecific.HoraInicio = ""
 	valueSpecific.HoraFin = ""
 	valueSpecific.Día = ""
+}
+
+function searchSchedules(){
+
 }
 
 function drawTableWhitData() {
