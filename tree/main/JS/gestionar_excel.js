@@ -26,31 +26,85 @@ var valueSpecific = {
 	Asignatura: [],
 	Sección: [],
 	Docente: "",
+	Día: "",
 	HoraInicio: 0,
 	HoraFin: 0,
-	Día: "",
 	Sala: ""
 }
 
 let arraySubjets = []
 
-const valueSchedule = {
-	day: "",
-	hourStart: "",
-	hourEnd: ""
-}
+// var valueSubjet = {
+// 	nombreA: "A1",
+// 	section: []
+// }
 
-const valueSection = {
-	nombreS: "",
-	horario: valueSchedule
-}
+// arraySubjets.push(valueSubjet)
 
-const valueSubjet = {
-	nombreA: "",
-	section: [
-		valueSection
-	]
-}
+// var valueSection = {
+// 	nombreS: "A1S1",
+// 	horario: []
+// }
+
+// arraySubjets[arraySubjets.length - 1].section.push(valueSection)
+
+// var valueSchedule = {
+// 	day: "Jueves",
+// 	hourStart: 10,
+// 	hourEnd: 20
+// }
+
+// arraySubjets[arraySubjets.length - 1].section[arraySubjets[arraySubjets.length - 1].section.length - 1].horario.push(valueSchedule)
+
+// var valueSchedule2 = {
+// 	day: "Miercoes",
+// 	hourStart: 20,
+// 	hourEnd: 40
+// }
+
+// arraySubjets[arraySubjets.length - 1].section[arraySubjets[arraySubjets.length - 1].section.length - 1].horario.push(valueSchedule2)
+
+// console.log(arraySubjets)
+
+
+
+
+// arraySubjets[arraySubjets.length - 1].section.push(valueSection)
+
+// arraySection = arraySubjets[0].section
+// console.log(arraySection)
+// var valueSection = {
+// 	nombreS: "A1S2",
+// 	horario: []
+// }
+// var arraySection2 = [
+// 	{ nombreS: "A1S2", horario: [] },
+// 	{ nombreS: "A1S3", horario: [] }
+// ]
+// filtroSection = arraySubjets[arraySubjets.length - 1].section.find(a => a.nombreS === valueSection.nombreS);
+
+
+// if (filtroSection == undefined) {
+
+// 	console.log('no existe')
+// } else {
+
+// 	console.log(filtroSection)
+// 	console.log(filtroSection.nombreS)
+// 	console.log(filtroSection.nombreS == valueSection.nombreS)
+// 	if (filtroSection.nombreS == valueSection.nombreS) {
+// 		console.log('ya existe')
+// 	}
+// }
+
+
+
+
+
+
+
+
+
 
 
 function handleFileSelect(evt) {
@@ -301,7 +355,11 @@ function filterCareer() {
 
 		valueSpecific.Asignatura = [selectedValuesSubjets[p]] // Adapta el valueSpecific solo para esa asignatura con los datos nesesarios para filtrar
 
-		valueSubjet.nombreA = valueSpecific.Asignatura
+		var valueSubjet = {
+
+			nombreA: valueSpecific.Asignatura,
+			section: []
+		}
 
 		arraySubjets.push(valueSubjet)
 
@@ -315,7 +373,13 @@ function filterCareer() {
 
 			valueSpecific.Sección = [selectionSubjets[q]] // Adapta el valueSpecific solo para esa sección con los datos nesesarios para filtrar
 
-			valueSection.nombreS = valueSpecific.Sección
+			var valueSection = {
+
+				nombreS: valueSpecific.Sección,
+				horario: []
+			}
+
+			filtroSection = arraySubjets[arraySubjets.length - 1].section.find(a => a.nombreS === valueSection.nombreS);
 
 			arraySubjets[arraySubjets.length - 1].section.push(valueSection)
 
@@ -333,23 +397,25 @@ function filterCareer() {
 				arrayHour = stringHourStart.split(":")
 				valueSpecific.HoraFin = parseInt(arrayHour[0]) * 3600 + parseInt(arrayHour[1]) * 60
 
-				valueSchedule.day = valueSpecific.Día
-				valueSchedule.hourStart = valueSpecific.HoraInicio
-				valueSchedule.hourEnd = valueSpecific.HoraFin
-
-				arraySubjets[arraySubjets.length - 1].section[arraySubjets[arraySubjets.length - 1].section.length].horario = valueSchedule
-
 				console.log(valueSpecific.Asignatura + " " + valueSpecific.Sección + " " + valueSpecific.Día + " " + valueSpecific.HoraInicio + " " + valueSpecific.HoraFin)
+
+				var valueSchedule = {
+					day: valueSpecific.Día,
+					hourStart: valueSpecific.HoraInicio,
+					hourEnd: valueSpecific.HoraFin
+				}
+
+				arraySubjets[arraySubjets.length - 1].section[arraySubjets[arraySubjets.length - 1].section.length - 1].horario.push(valueSchedule)
+				// No sirve si uno crea por defecto los atributos inicialisados con "", {} o [], aquello es considerado como un atributo mas del array y entorpecera el proseso de asignación en el FOR
 			}
 		}
 	}
+	console.log(valueSubjet)
 }
 
 function rebuild1_1() {
 
 	valueSpecific.Sección = [] // Reinicio, para que la ultima sección no entorpesca a la asignatura siguiente, estuve harto tiempo buscando la solución
-	valueSubjet.nombreA = []
-	valueSubjet.section = []
 }
 
 function rebuild1_2() {
