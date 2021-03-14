@@ -6,7 +6,7 @@ var stringWorkingDay, stringCourse, stringNivel, stringSubjets;
 let selectedValuesSubjets
 var XL_row_object, json_object, json_object_parse, json_object_parse2, workbook;
 var age
-let arraySubjets
+let arraySubjets, arraySubjetsNew, arraySubjetsOld, arraySectionNew, arraySectionOld
 
 const valueGeneral = {
 
@@ -19,18 +19,19 @@ const valueGeneral = {
 	Tipo_Plan_de_Estudio: [],
 	Jornada: [],
 	Carrera: [],
-	Nivel: []
+	Nivel: [],
+	Sección: []
 }
 
 var valueSpecific = {
 
 	Asignatura: [],
 	Sección: [],
-	Docente: "",
-	Día: "",
+	Docente: '',
+	Día: '',
 	HoraInicio: 0,
 	HoraFin: 0,
-	Sala: ""
+	Sala: ''
 }
 
 function handleFileSelect(evt) {
@@ -54,16 +55,16 @@ class ExcelToJSON {
 				workbook = XLSX.read(data, { type: 'binary' })
 
 				// Recorrer las hojas del Excel
-				document.getElementById("div_leaves").innerHTML = ""
-				document.getElementById("div_leaves").innerHTML +=
-					"<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o Profesor/a.</h6>"
+				document.getElementById('div_leaves').innerHTML = ''
+				document.getElementById('div_leaves').innerHTML =
+					'<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o Profesor/a.</h6>'
 
 				workbook.SheetNames.forEach(function (sheetName) {
 
-					document.getElementById("div_leaves").innerHTML +=
-						"<div class='form-check'><input class='form-check-input' type='radio' id='leaves' name='leaves' value='"
-						+ sheetName + "' onchange='handleChange(event)' >" +
-						"<label class='form-check-label' for='" + sheetName + "'>" + sheetName + "</label></div>"
+					document.getElementById('div_leaves').innerHTML +=
+						'<div class="form-check"><input class="form-check-input" type="radio" id="leaves" name="leaves" value="'
+						+ sheetName + '" onchange="handleChange(event)" >' +
+						'<label class="form-check-label" for="' + sheetName + '">' + sheetName + '</label></div>'
 				})
 			}
 
@@ -90,7 +91,7 @@ function handleChange(e) {
 function comparerArray() {
 
 	var leave
-	var checkboxArray = document.getElementsByName("leaves")
+	var checkboxArray = document.getElementsByName('leaves')
 	for (i = 0; i < checkboxArray.length; i++) {
 		if (checkboxArray[i].checked == true) {
 			leave = i
@@ -100,27 +101,35 @@ function comparerArray() {
 	// Saber los nombres de las columnas que tiene el arcchivo Excel
 	columns_name = Object.getOwnPropertyNames(json_object_parse[leave])
 
-	if (columns_name.includes("Asignatura")) {
+	if (columns_name.includes('Asignatura')) {
 		age = 2018
-	} else if (columns_name.includes("Asignatura programada")) {
+	} else if (columns_name.includes('Asignatura programada')) {
 		age = 2017
 	}
 
 	if (age == 2018 || age == 2017) {
 
-		document.getElementById("div_filters").innerHTML = ""
-		document.getElementById("div_filters").innerHTML +=
-			"<div class='row'><h6>3 - Filtros</h6><div class='col-12 col-md-4'><h6>Jornada</h6><div id='div_working_day' class='form-check'></div></div>" +
-			"<div class='col-12 col-md-8'><h6>Carrera</h6><div id='div_career' class='form-check'></div></div></div><div class='row'>" +
+		document.getElementById('div_filters').innerHTML = ''
+		document.getElementById('div_filters').innerHTML =
+			"<div class='row'><h6>3 - Filtros</h6>" +
+			"<div class='col-12 col-md-4'><h6>Jornada (requerida selección)</h6><div id='div_working_day' class='form-check'></div></div>" +
+			"<div class='col-12 col-md-8'><h6>Carrera</h6><div id='div_career' class='form-check'></div></div></div>" +
+			"<div class='row'>" +
 			"<div class='col-12 col-md-4'><h6>Semenstres</h6><div id='div_semester' class='form-check'></div></div>" +
-			"<div class='col-12 col-md-8'><h6>Asignaturas (requerida selección)</h6><div id='div_subjets' class='form-check'></div></div></div>"
+			"<div class='col-12 col-md-8'><h6>Asignaturas (requerida selección)</h6><div id='div_subjets' class='form-check'></div></div></div>" +
+			"<div class='row'>" +
+			"<div class='col-12 col-md-4'><h6>Sección (opcional)</h6><div id='div_section' class='form-check'></div></div>" +
+			"<div class='col-12 col-md-8'><div id='div_button' class='d-flex justify-content-center align-items-center'></div></div></div>"
+
 		showWorkingDay()
 		showCareer()
 		showSemester()
 		showSubject(1)
+		showSection()
+		showButton()
 	} else {
 
-		alert("Revise los nombre de las columnas con su contenido correspondiente")
+		alert('Revise los nombre de las columnas con su contenido correspondiente')
 	}
 
 	// Sigla programada o Sigla en malla > Sigla
@@ -132,8 +141,8 @@ function comparerArray() {
 
 function showWorkingDay() {
 
-	stringWorkingDay = ""
-	document.getElementById("div_working_day").innerHTML = "";
+	stringWorkingDay = ''
+	document.getElementById('div_working_day').innerHTML = '';
 
 	distinctWorkingDay = [...new Set(json_object_parse.map(x => x.Jornada))]
 
@@ -142,14 +151,14 @@ function showWorkingDay() {
 
 		stringWorkingDay = stringWorkingDay + "<option>" + distinctWorkingDay[m] + "</option>"
 	}
-	document.getElementById("div_working_day").innerHTML +=
+	document.getElementById('div_working_day').innerHTML =
 		"<select multiple class='form-control' id='working_day' onchange='showSubject(2)'>" + stringWorkingDay + "</select>"
 }
 
 function showCareer() {
 
-	distinctCourse = ""
-	document.getElementById("div_career").innerHTML = ""
+	distinctCourse = ''
+	document.getElementById('div_career').innerHTML = ''
 
 	distinctCourse = [...new Set(json_object_parse.map(x => x.Carrera))]
 
@@ -158,14 +167,14 @@ function showCareer() {
 
 		stringCourse = stringCourse + "<option>" + distinctCourse[n] + "</option>"
 	}
-	document.getElementById("div_career").innerHTML +=
+	document.getElementById('div_career').innerHTML =
 		"<select multiple class='form-control' id='career' onchange='showSubject(2)'>" + stringCourse + "</select>"
 }
 
 function showSemester() {
 
-	stringNivel = ""
-	document.getElementById("div_semester").innerHTML = ""
+	stringNivel = ''
+	document.getElementById('div_semester').innerHTML = ''
 
 	distinctSemester = [...new Set(json_object_parse.map(x => x.Nivel))]
 
@@ -174,9 +183,9 @@ function showSemester() {
 	// Listar semestre
 	for (let ñ = 0; ñ < distinctSemester.length; ñ++) {
 
-		stringNivel = stringNivel + "<option>" + distinctSemester[ñ] + "</option>"
+		stringNivel += "<option>" + distinctSemester[ñ] + "</option>"
 	}
-	document.getElementById("div_semester").innerHTML +=
+	document.getElementById('div_semester').innerHTML =
 		"<select multiple class='form-control' id='nivel' onchange='showSubject(2)'>" + stringNivel + "</select>"
 }
 
@@ -204,17 +213,41 @@ function showSubject(estado) {
 		}
 	}
 
-	stringSubjets = ""
-	document.getElementById("div_subjets").innerHTML = ""
+	stringSubjets = ''
+	document.getElementById('div_subjets').innerHTML = ''
 
 	// Listar asignaturas
 	for (let o = 0; o < distinctSubjets.length; o++) {
 
-		stringSubjets = stringSubjets + "<option>" + distinctSubjets[o] + "</option>"
+		stringSubjets += "<option>" + distinctSubjets[o] + "</option>"
 	}
-	document.getElementById("div_subjets").innerHTML +=
-		"<select multiple class='form-control' id='subjets'>" + stringSubjets +
-		"</select><div class='p-2'><button class='btn btn-secondary' onclick='getValues(2)'>Generar Horarios</button></div>"
+	document.getElementById('div_subjets').innerHTML =
+		"<select multiple class='form-control' id='subjets'>" + stringSubjets + "</select>"
+}
+
+function showSection() {
+
+	stringSection = ''
+	document.getElementById('div_section').innerHTML = ''
+
+	distinctSection = [...new Set(json_object_parse.map(x => x.Sección))]
+
+	distinctSection.sort()
+
+	// Listar semestre
+	for (let p = 0; p < distinctSection.length; p++) {
+
+		stringSection += "<option>" + distinctSection[p] + "</option>"
+	}
+	document.getElementById('div_section').innerHTML =
+		"<select multiple class='form-control' id='section' onchange='showSubject(2)'>" + stringSection + "</select>"
+}
+
+function showButton() {
+
+	document.getElementById('div_button').innerHTML = ''
+	document.getElementById('div_button').innerHTML =
+		'<div class="p-2"><button class="btn btn-secondary" onclick="getValues(2)">Generar Horarios</button></div>'
 }
 
 function getValues(estatus) {
@@ -231,10 +264,14 @@ function getValues(estatus) {
 	let selectElementSubjets = document.getElementById('subjets')
 	selectedValuesSubjets = Array.from(selectElementSubjets.selectedOptions).map(option => option.value)
 
+	let selectElementSection = document.getElementById('section')
+	let selectedValuesSection = Array.from(selectElementSection.selectedOptions).map(option => option.value)
+
 	valueGeneral.Jornada = selectedValuesWorkingDay
 	valueGeneral.Carrera = selectedValuesCareer
 	valueGeneral.Nivel = selectedValuesNivel
 	valueGeneral.Asignatura = selectedValuesSubjets
+	valueGeneral.Sección = selectedValuesSection
 
 	json_object_parse2 = find_in_object(json_object_parse, valueGeneral)
 
@@ -301,14 +338,15 @@ function filterCareer() {
 			for (let r = 0; r < selectionSection.length; r++) {
 
 				valueSpecific.Día = selectionSection[r].Día
-				var stringHourStart = selectionSection[r].Horario.split(" ")[1]
-				let arrayHour = stringHourStart.split(":")
+				var stringHourStart = selectionSection[r].Horario.split(' ')[1]
+				let arrayHour = stringHourStart.split(':')
 				valueSpecific.HoraInicio = parseInt(arrayHour[0]) * 3600 + parseInt(arrayHour[1]) * 60 // Adapta el valueSpecific solo para ese horario con los datos nesesarios para filtrar
-				stringHourStart = selectionSection[r].Horario.split(" ")[3]
-				arrayHour = stringHourStart.split(":")
+				stringHourStart = selectionSection[r].Horario.split(' ')[3]
+				arrayHour = stringHourStart.split(':')
 				valueSpecific.HoraFin = parseInt(arrayHour[0]) * 3600 + parseInt(arrayHour[1]) * 60
 
 				var valueSchedule = {
+
 					day: valueSpecific.Día,
 					hourStart: valueSpecific.HoraInicio,
 					hourEnd: valueSpecific.HoraFin
@@ -316,8 +354,7 @@ function filterCareer() {
 
 				a = arraySubjets.length - 1
 				b = arraySubjets[a].section.length - 1
-				arraySubjets[a].section[b].horario.push(valueSchedule)
-				// No sirve si uno crea por defecto los atributos inicialisados con "", {} o [], aquello es considerado como un atributo mas del array y entorpecera el proseso de asignación en el FOR
+				arraySubjets[a].section[b].horario.push(valueSchedule) // No sirve si uno crea por defecto los atributos inicialisados con "", {} o [], aquello es considerado como un atributo mas del array y entorpecera el proseso de asignación en el FOR
 			}
 		}
 	}
@@ -334,19 +371,62 @@ function rebuild1_1() {
 
 function rebuild1_2() {
 
-	valueSpecific.HoraInicio = ""
-	valueSpecific.HoraFin = ""
-	valueSpecific.Día = ""
+	valueSpecific.HoraInicio = ''
+	valueSpecific.HoraFin = ''
+	valueSpecific.Día = ''
 }
 
-function searchSchedules(){
+function searchSchedules() {
 
+	for (let r = 0; r < arraySubjets.length; r++) {
+
+		console.log(arraySubjets[r])
+
+		arraySubjetsNew = arraySubjets[r]
+
+		for (let s = 0; s < arraySubjets[r].section.length; s++) {
+
+			arraySectionNew = arraySubjets[r].section[s]
+
+			console.log(arraySubjets[r].section[s])
+
+			if (r > 0) {
+				if (arraySectionOld != undefined) {
+
+
+					for (let t = 0; t < arraySubjetsOld.section.length; t++) {
+						console.log(arraySubjetsOld.section[t])
+						if (
+							arraySectionNew.horario[0].hourStart > arraySectionOld.horario[0].hourEnd ||
+							arraySectionNew.horario[0].hourEnd < arraySectionOld.horario[0].hourStart
+						) {
+							console.log('continua')
+						}
+					}
+				}
+			}
+
+
+			for (let t = 0; t < arraySubjets[r].section[s].horario.length; t++) {
+				console.log(arraySubjets[r].section[s].horario[t])
+			}
+		}
+
+		console.log('Fin asignatura ', r)
+		arraySubjetsOld = arraySubjetsNew
+
+		arraySectionNew = []
+		arraySectionOld = []
+	}
+
+	arraySubjetsNew = []
+	arraySubjetsOld = []
 }
 
 function drawTableWhitData() {
 
 	/*
-	document.getElementById("div_data").innerHTML = document.getElementById("div_data").innerHTML +
+	document.getElementById('div_data').innerHTML = document.getElementById('div_data').innerHTML +
 	<table class='table table-striped'>
 		<caption>Contenido</caption>
 		<thead>
