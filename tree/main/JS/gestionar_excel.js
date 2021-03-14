@@ -52,20 +52,9 @@ class ExcelToJSON {
 			reader.onload = function (e) {
 
 				var data = e.target.result
-				workbook = XLSX.read(data, { type: 'binary' })
+				workbook = XLSX.read(data, { type: 'binary' }) // < [Violation] 'load' handler took 1474ms
 
-				// Recorrer las hojas del Excel
-				document.getElementById('div_leaves').innerHTML = ''
-				document.getElementById('div_leaves').innerHTML =
-					'<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o Profesor/a.</h6>'
-
-				workbook.SheetNames.forEach(function (sheetName) {
-
-					document.getElementById('div_leaves').innerHTML +=
-						'<div class="form-check"><input class="form-check-input" type="radio" id="leaves" name="leaves" value="'
-						+ sheetName + '" onchange="handleChange(event)" >' +
-						'<label class="form-check-label" for="' + sheetName + '">' + sheetName + '</label></div>'
-				})
+				showLeaves()
 			}
 
 			reader.onerror = function (ex) {
@@ -76,6 +65,22 @@ class ExcelToJSON {
 			reader.readAsBinaryString(file)
 		}
 	}
+}
+
+function showLeaves() {
+
+	// Recorrer las hojas del Excel
+	document.getElementById('div_leaves').innerHTML = ''
+	document.getElementById('div_leaves').innerHTML =
+		'<h6>2 - Seleccione la hoja que contenga los datos para la toma de ramos, ejemplo: Asignaturas, Horarios o Profesor/a.</h6>'
+
+	workbook.SheetNames.forEach(function (sheetName) {
+
+		document.getElementById('div_leaves').innerHTML +=
+			'<div class="form-check"><input class="form-check-input" type="radio" id="leaves" name="leaves" value="'
+			+ sheetName + '" onclick="handleChange(event)" >' +
+			'<label class="form-check-label" for="' + sheetName + '">' + sheetName + '</label></div>'
+	})
 }
 
 function handleChange(e) {
@@ -111,21 +116,21 @@ function comparerArray() {
 
 		document.getElementById('div_filters').innerHTML = ''
 		document.getElementById('div_filters').innerHTML =
-			"<div class='row'><h6>3 - Filtros</h6>" +
-			"<div class='col-12 col-md-4'><h6>Jornada (requerida selección)</h6><div id='div_working_day' class='form-check'></div></div>" +
-			"<div class='col-12 col-md-8'><h6>Carrera</h6><div id='div_career' class='form-check'></div></div></div>" +
-			"<div class='row'>" +
-			"<div class='col-12 col-md-4'><h6>Semenstres</h6><div id='div_semester' class='form-check'></div></div>" +
-			"<div class='col-12 col-md-8'><h6>Asignaturas (requerida selección)</h6><div id='div_subjets' class='form-check'></div></div></div>" +
-			"<div class='row'>" +
-			"<div class='col-12 col-md-4'><h6>Sección (opcional)</h6><div id='div_section' class='form-check'></div></div>" +
-			"<div class='col-12 col-md-8'><div id='div_button' class='d-flex justify-content-center align-items-center'></div></div></div>"
+			'<div class="row"><h6>3 - Filtros</h6>' +
+			'<div class="col-12 col-md-4"><h6>Jornada (requerida selección)</h6><div id="div_working_day" class="form-check"></div></div>' +
+			'<div class="col-12 col-md-8"><h6>Carrera</h6><div id="div_career" class="form-check"></div></div></div>' +
+			'<div class="row">' +
+			'<div class="col-12 col-md-4"><h6>Semenstres</h6><div id="div_semester" class="form-check"></div></div>' +
+			'<div class="col-12 col-md-8"><h6>Asignaturas (requerida selección)</h6><div id="div_subjets" class="form-check"></div></div></div>' +
+			'<div class="row">' +
+			'<div class="col-12 col-md-4"><h6>Sección (opcional)</h6><div id="div_section" class="form-check"></div></div>' +
+			'<div class="col-12 col-md-8 d-flex justify-content-center align-items-center"><div id="div_button"></div></div></div>'
 
 		showWorkingDay()
 		showCareer()
 		showSemester()
 		showSubject(1)
-		showSection()
+		showSection(1)
 		showButton()
 	} else {
 
@@ -149,10 +154,10 @@ function showWorkingDay() {
 	// Listar jornada (diurno o vespertino)
 	for (let m = 0; m < distinctWorkingDay.length; m++) {
 
-		stringWorkingDay = stringWorkingDay + "<option>" + distinctWorkingDay[m] + "</option>"
+		stringWorkingDay = stringWorkingDay + '<option>' + distinctWorkingDay[m] + '</option>'
 	}
 	document.getElementById('div_working_day').innerHTML =
-		"<select multiple class='form-control' id='working_day' onchange='showSubject(2)'>" + stringWorkingDay + "</select>"
+		'<select multiple class="form-control" id="working_day" onclick="showSubject(2)">' + stringWorkingDay + '</select>'
 }
 
 function showCareer() {
@@ -165,10 +170,10 @@ function showCareer() {
 	// Listar curso
 	for (let n = 0; n < distinctCourse.length; n++) {
 
-		stringCourse = stringCourse + "<option>" + distinctCourse[n] + "</option>"
+		stringCourse = stringCourse + '<option>' + distinctCourse[n] + '</option>'
 	}
 	document.getElementById('div_career').innerHTML =
-		"<select multiple class='form-control' id='career' onchange='showSubject(2)'>" + stringCourse + "</select>"
+		'<select multiple class="form-control" id="career" onclick="showSubject(2)">' + stringCourse + '</select>'
 }
 
 function showSemester() {
@@ -183,64 +188,80 @@ function showSemester() {
 	// Listar semestre
 	for (let ñ = 0; ñ < distinctSemester.length; ñ++) {
 
-		stringNivel += "<option>" + distinctSemester[ñ] + "</option>"
+		stringNivel += '<option>' + distinctSemester[ñ] + '</option>'
 	}
 	document.getElementById('div_semester').innerHTML =
-		"<select multiple class='form-control' id='nivel' onchange='showSubject(2)'>" + stringNivel + "</select>"
+		'<select multiple class="form-control" id="nivel" onclick="showSubject(2)">' + stringNivel + '</select>'
 }
 
 function showSubject(estado) {
 
-	if (estado == 1) {
-
-		if (age == 2018) {
-
-			distinctSubjets = [...new Set(json_object_parse.map(x => x.Asignatura))]
-		} else if (age == 2017) {
-
-			distinctSubjets = [...new Set(json_object_parse.map(x => x.Asignatura_en_malla))]
-		}
-	} else if (estado == 2) {
+	if (estado == 3) {
 
 		getValues(1)
 
-		if (age == 2018) {
+		showSection(2)
+	} else {
 
-			distinctSubjets = [...new Set(json_object_parse2.map(x => x.Asignatura))]
-		} else if (age == 2017) {
+		if (estado == 1) {
 
-			distinctSubjets = [...new Set(json_object_parse2.map(x => x.Asignatura_en_malla))]
+			if (age == 2018) {
+
+				distinctSubjets = [...new Set(json_object_parse.map(x => x.Asignatura))]
+			} else if (age == 2017) {
+
+				distinctSubjets = [...new Set(json_object_parse.map(x => x.Asignatura_en_malla))]
+			}
+		} else if (estado == 2) {
+
+			getValues(1)
+
+			showSection(2)
+
+			if (age == 2018) {
+
+				distinctSubjets = [...new Set(json_object_parse2.map(x => x.Asignatura))]
+			} else if (age == 2017) {
+
+				distinctSubjets = [...new Set(json_object_parse2.map(x => x.Asignatura_en_malla))]
+			}
 		}
+
+		stringSubjets = ''
+		document.getElementById('div_subjets').innerHTML = ''
+
+		// Listar asignaturas
+		for (let o = 0; o < distinctSubjets.length; o++) {
+
+			stringSubjets += '<option>' + distinctSubjets[o] + '</option>'
+		}
+		document.getElementById('div_subjets').innerHTML =
+			'<select multiple class="form-control" id="subjets" onclick="showSubject(3)">' + stringSubjets + '</select>'
 	}
-
-	stringSubjets = ''
-	document.getElementById('div_subjets').innerHTML = ''
-
-	// Listar asignaturas
-	for (let o = 0; o < distinctSubjets.length; o++) {
-
-		stringSubjets += "<option>" + distinctSubjets[o] + "</option>"
-	}
-	document.getElementById('div_subjets').innerHTML =
-		"<select multiple class='form-control' id='subjets'>" + stringSubjets + "</select>"
 }
 
-function showSection() {
+function showSection(estado) {
 
 	stringSection = ''
 	document.getElementById('div_section').innerHTML = ''
 
-	distinctSection = [...new Set(json_object_parse.map(x => x.Sección))]
+	if (estado == 1) {
+
+		distinctSection = [...new Set(json_object_parse.map(x => x.Sección))]
+	} else if (estado == 2) {
+
+		distinctSection = [...new Set(json_object_parse2.map(x => x.Sección))]
+	}
 
 	distinctSection.sort()
 
 	// Listar semestre
 	for (let p = 0; p < distinctSection.length; p++) {
 
-		stringSection += "<option>" + distinctSection[p] + "</option>"
+		stringSection += '<option>' + distinctSection[p] + '</option>'
 	}
 	document.getElementById('div_section').innerHTML =
-		"<select multiple class='form-control' id='section' onchange='showSubject(2)'>" + stringSection + "</select>"
+		'<select multiple class="form-control" id="section">' + stringSection + '</select>'
 }
 
 function showButton() {
@@ -270,8 +291,8 @@ function getValues(estatus) {
 	valueGeneral.Jornada = selectedValuesWorkingDay
 	valueGeneral.Carrera = selectedValuesCareer
 	valueGeneral.Nivel = selectedValuesNivel
-	valueGeneral.Asignatura = selectedValuesSubjets
 	valueGeneral.Sección = selectedValuesSection
+	valueGeneral.Asignatura = selectedValuesSubjets
 
 	json_object_parse2 = find_in_object(json_object_parse, valueGeneral)
 
@@ -390,22 +411,21 @@ function searchSchedules() {
 
 			console.log(arraySubjets[r].section[s])
 
-			if (r > 0) {
-				if (arraySectionOld != undefined) {
+			if (arraySubjetsOld != undefined) {
 
 
-					for (let t = 0; t < arraySubjetsOld.section.length; t++) {
-						console.log(arraySubjetsOld.section[t])
-						if (
-							arraySectionNew.horario[0].hourStart > arraySectionOld.horario[0].hourEnd ||
-							arraySectionNew.horario[0].hourEnd < arraySectionOld.horario[0].hourStart
-						) {
-							console.log('continua')
-						}
+				for (let t = 0; t < arraySubjetsOld.section.length; t++) {
+					console.log(arraySubjetsOld.section[t])
+					arraySectionOld = arraySubjetsOld.section[t]
+					console.log(arraySectionNew.horario[0].hourStart + ' ' + arraySectionNew.horario[0].hourEnd)
+					if (
+						arraySectionNew.horario[0].hourStart > arraySectionOld.horario[0].hourEnd ||
+						arraySectionNew.horario[0].hourEnd < arraySectionOld.horario[0].hourStart
+					) {
+						console.log('continua')
 					}
 				}
 			}
-
 
 			for (let t = 0; t < arraySubjets[r].section[s].horario.length; t++) {
 				console.log(arraySubjets[r].section[s].horario[t])
@@ -415,12 +435,12 @@ function searchSchedules() {
 		console.log('Fin asignatura ', r)
 		arraySubjetsOld = arraySubjetsNew
 
-		arraySectionNew = []
-		arraySectionOld = []
+		// arraySectionNew = []
+		// arraySectionOld = []
 	}
 
-	arraySubjetsNew = []
-	arraySubjetsOld = []
+	// arraySubjetsNew = []
+	// arraySubjetsOld = []
 }
 
 function drawTableWhitData() {
